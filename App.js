@@ -20,6 +20,7 @@ export default function App() {
       if(user){
         setLoggedIn(true);
         setUserObj(user);
+        
       }else{
         setLoggedIn(false);
       }

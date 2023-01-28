@@ -6,11 +6,12 @@ import OutNav from "./OutNav";
 
 const Nav = createNativeStackNavigator();
 
-const Root = ()=>{
+const Root = ({userObj})=>{
+   
     return(
-        <Nav.Navigator screenOptions={{headerShown:false}}>
-            <Nav.Screen name="BottomTabs" component={BottomTabs}/>
-            <Nav.Screen name="InNav" component={InNav}/>
+        <Nav.Navigator screenOptions={{headerShown:false}} userObj={userObj}>
+            <Nav.Screen name="BottomTabs" component={BottomTabs} />
+            <Nav.Screen name="InNav" component={InNav} />
             
         </Nav.Navigator>
     )

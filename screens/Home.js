@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import QRCode from "react-native-qrcode-svg";
 import styled from "styled-components";
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 const Container = styled.View`
   align-items: center;
     justify-content: center;
@@ -30,13 +31,30 @@ const QRgeneratorText = styled.Text`
 const Out = styled.TouchableOpacity``;
 const OutText =styled.Text``;
 const Home =({navigation:{navigate}})=>{
-
+    //const UID = auth().currentUser.uid;
+    const [profileData, setProfileData] = useState([]);
+    const getProfile = ()=>{
+       
+        firestore().collection("Profile")
+        .get()
+        .then((querySnapshot)=>{
+            querySnapshot.docs
+            .forEach((doc)=>setProfileData(doc.data()));
+        })  
+       console.log(profileData);
+    }
+    useEffect(()=>{
+        getProfile();
+       
+    },[])
+    
     const QR = ()=>{
-       navigate("InNav", {screen: "QRgenerator"});
+       navigate("InNav",{screen: "QRgenerator" , params:[profileData]});
     }
     const SignOut = ()=>{
         auth().signOut();
     }
+   
     return(
         <Container>
         

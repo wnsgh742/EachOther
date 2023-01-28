@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 const Container = styled.View`
     flex:1;
 `;
@@ -49,6 +50,7 @@ const MainProfileButton = styled.Button`
     
 `;
 const Profile =()=>{
+    const UID = auth().currentUser.uid;
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
@@ -56,10 +58,11 @@ const Profile =()=>{
     
     const SaveProfile = ()=>{
         firestore().collection("Profile").add({
+            id:UID,
            nickname: nickName,
            age: age,
             job: job,
-           address: address,
+           region: address,
         })
         console.log("aa");
     }
@@ -90,7 +93,7 @@ const Profile =()=>{
                     <MainProfileTextInput
                         value={address}
                         onChangeText={(text)=>setAddress(text)}
-                        placeholder="address"
+                        placeholder="Region"
                      />
                 </MainProfileTextInputView>
             </MainProfileView>

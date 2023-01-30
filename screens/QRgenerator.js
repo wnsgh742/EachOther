@@ -2,12 +2,25 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QRCode from "react-native-qrcode-svg";
 import firestore from '@react-native-firebase/firestore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { GREY_COLOR } from "../styled/Colors";
 const Container = styled.View`
-    margin-top: 30px;
-    align-items: center;
+   
+    
 `;
-const Title = styled.Text``;
-
+const Title = styled.Text`
+    font-size: 22;
+`;
+const HeaderView = styled.TouchableOpacity`
+    flex-direction: row;
+   
+    margin-top: 50px;
+`;
+const HeaderBack = styled.TouchableOpacity``;
+const QRView = styled.View`
+    align-items: center;
+    margin-top: 30px;
+`;
 const QRgenerator =({navigation:{navigate}, route})=>{
     console.log(route.params[0]);
    const paramsData =[
@@ -19,17 +32,27 @@ const QRgenerator =({navigation:{navigate}, route})=>{
    
    ]
     const [profile, setProfile] = useState(paramsData);
-   
+   const HomeBack = ()=>{
+    navigate("Home");
+   }
     useEffect(()=>{
         console.log(profile);
     },[])
     return(
         <Container>
-            <Title>QRgenerator</Title>
+
+            <HeaderView onPress={HomeBack}>
+                <Ionicons name="chevron-back-outline" size={24} color="Black" />
+                <Title>Home</Title>
+            </HeaderView>
+
+            <QRView>
             <QRCode 
                value={profile}
                
             />
+            </QRView>
+
         </Container>
     )
 }

@@ -16,7 +16,13 @@ target 'Test40' do
   config = use_native_modules!
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
-  
+  pod 'FirebaseAppCheckInterop', :modular_headers => true
+  pod 'FirebaseAuthInterop', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'GTMSessionFetcher', :modular_headers => true
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+ 
   # Flags change depending on the env values.
   flags = get_default_flags()
 

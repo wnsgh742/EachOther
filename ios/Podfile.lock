@@ -626,15 +626,22 @@ PODS:
   - Firebase/Firestore (10.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.3.0)
+  - Firebase/Storage (10.3.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 10.3.0)
+  - FirebaseAppCheckInterop (10.4.0)
   - FirebaseAuth (10.3.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+  - FirebaseAuthInterop (10.4.0)
   - FirebaseCore (10.3.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreExtension (10.4.0):
+    - FirebaseCore (~> 10.0)
   - FirebaseCoreInternal (10.3.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseFirestore (10.3.0):
@@ -650,6 +657,12 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseStorage (10.3.0):
+    - FirebaseAppCheckInterop (~> 10.0)
+    - FirebaseAuthInterop (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseCoreExtension (~> 10.0)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - fmt (6.2.1)
   - glog (0.3.5)
   - GoogleSignIn (6.2.4):
@@ -743,7 +756,11 @@ PODS:
   - GTMAppAuth (1.3.1):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 3.0, >= 1.5)
+  - GTMSessionFetcher (2.3.0):
+    - GTMSessionFetcher/Full (= 2.3.0)
   - GTMSessionFetcher/Core (2.3.0)
+  - GTMSessionFetcher/Full (2.3.0):
+    - GTMSessionFetcher/Core
   - hermes-engine (0.71.0):
     - hermes-engine/Pre-built (= 0.71.0)
   - hermes-engine/Pre-built (0.71.0)
@@ -760,6 +777,8 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - Permission-Camera (3.6.1):
+    - RNPermissions
   - PromisesObjC (2.1.1)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -980,6 +999,16 @@ PODS:
   - React-jsinspector (0.71.0)
   - React-logger (0.71.0):
     - glog
+  - react-native-camera (4.2.1):
+    - React-Core
+    - react-native-camera/RCT (= 4.2.1)
+    - react-native-camera/RN (= 4.2.1)
+  - react-native-camera/RCT (4.2.1):
+    - React-Core
+  - react-native-camera/RN (4.2.1):
+    - React-Core
+  - react-native-image-picker (5.0.1):
+    - React-Core
   - react-native-safe-area-context (4.4.1):
     - RCT-Folly
     - RCTRequired
@@ -1079,8 +1108,14 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
     - RNFBApp
+  - RNFBStorage (16.7.0):
+    - Firebase/Storage (= 10.3.0)
+    - React-Core
+    - RNFBApp
   - RNGoogleSignin (9.0.2):
     - GoogleSignIn (~> 6.2)
+    - React-Core
+  - RNPermissions (3.6.1):
     - React-Core
   - RNScreens (3.18.2):
     - React-Core
@@ -1096,11 +1131,16 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
+  - FirebaseAppCheckInterop
+  - FirebaseAuthInterop
   - FirebaseCore
+  - FirebaseCoreExtension
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleUtilities
+  - GTMSessionFetcher
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
+  - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -1116,6 +1156,8 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -1133,7 +1175,9 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
+  - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1145,10 +1189,14 @@ SPEC REPOS:
     - AppAuth
     - BoringSSL-GRPC
     - Firebase
+    - FirebaseAppCheckInterop
     - FirebaseAuth
+    - FirebaseAuthInterop
     - FirebaseCore
+    - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseFirestore
+    - FirebaseStorage
     - fmt
     - GoogleSignIn
     - GoogleUtilities
@@ -1175,6 +1223,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
+  Permission-Camera:
+    :path: "../node_modules/react-native-permissions/ios/Camera"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -1203,6 +1253,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -1237,8 +1291,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBFirestore:
     :path: "../node_modules/@react-native-firebase/firestore"
+  RNFBStorage:
+    :path: "../node_modules/@react-native-firebase/storage"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -1257,10 +1315,14 @@ SPEC CHECKSUMS:
   FBLazyVector: 61839cba7a48c570b7ac3e1cd8a4d0948382202f
   FBReactNativeSpec: 5a14398ccf5e27c1ca2d7109eb920594ce93c10d
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
+  FirebaseAppCheckInterop: ef074633831a90cf6c10e8f2c1e1f8b7842a446a
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
+  FirebaseAuthInterop: fef284922da3c350f846ff85cc0dfd5186448e49
   FirebaseCore: 988754646ab3bd4bdcb740f1bfe26b9f6c0d5f2a
+  FirebaseCoreExtension: d209ada6f48bac53d149e996cf1b2dafa632a615
   FirebaseCoreInternal: 29b76f784d607df8b2a1259d73c3f04f1210137b
   FirebaseFirestore: 244f71ff14ef44f39e00b44d356eac708ce03103
+  FirebaseStorage: 0efbff0ac978981866d89804191688ae50d64033
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
@@ -1274,6 +1336,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  Permission-Camera: bf6791b17c7f614b6826019fcfdcc286d3a107f6
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: dea3e4163184ea57c50288c15c32c1529265c58f
@@ -1289,6 +1352,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 060dd495f1e2af3d87216f7ca8a94c55ec885b4f
   React-jsinspector: 5061fcbec93fd672183dfb39cc2f65e55a0835db
   React-logger: a6c0b3a807a8e81f6d7fea2e72660766f55daa50
+  react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
+  react-native-image-picker: 8cb4280e2c1efc3daeb2d9d597f9429a60472e40
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
   React-perflogger: e5fc4149e9bbb972b8520277f3b23141faa47a36
   React-RCTActionSheet: 991de88216bf03ab9bb1d213d73c62ecbe64ade7
@@ -1306,12 +1371,14 @@ SPEC CHECKSUMS:
   RNFBApp: 9295dac8a4e8857918bcff90328b197807ee0dc1
   RNFBAuth: 751f700af31914ed7cf1ec401066f884834fe5de
   RNFBFirestore: 488589fd2d02ca8f08ad5648664e9bb1c7ae952f
+  RNFBStorage: fda61a639bc8d2c0bb8e9bfca054b58583e3dc15
   RNGoogleSignin: 22e468a9474dbcb8618d8847205ad4f0b2575d13
+  RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   Yoga: c618b544ff8bd8865cdca602f00cbcdb92fd6d31
 
-PODFILE CHECKSUM: c7312d949722bb9bade4fc5b6398c0022dc707ca
+PODFILE CHECKSUM: 418a7303f88d3a6292e29aa4a274779a70de80b7
 
 COCOAPODS: 1.11.3

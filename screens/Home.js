@@ -28,7 +28,24 @@ const QRgeneratorText = styled.Text`
     
     
 `;
-const Out = styled.TouchableOpacity``;
+
+const QRscanner = styled.TouchableOpacity`
+    background-color: ${(props)=> props.theme.btnColor};
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border-radius: 15px;
+    width: 250px;
+    height: 60px;
+`;
+const QRscannerText = styled.Text`
+      font-size: 30px;
+    color: white;
+    border-color: black;
+`;
+const Out = styled.TouchableOpacity`
+    
+`;
 const OutText =styled.Text``;
 const Home =({navigation:{navigate}})=>{
     //const UID = auth().currentUser.uid;
@@ -41,15 +58,18 @@ const Home =({navigation:{navigate}})=>{
             querySnapshot.docs
             .forEach((doc)=>setProfileData(doc.data()));
         })  
-       console.log(profileData);
+      
     }
     useEffect(()=>{
         getProfile();
-       
+     
     },[])
     
-    const QR = ()=>{
+    const QRgenerate = ()=>{
        navigate("InNav",{screen: "QRgenerator" , params:[profileData]});
+    }
+    const QRscan = ()=>{
+        navigate("InNav",{screen:"QRscan"});
     }
     const SignOut = ()=>{
         auth().signOut();
@@ -59,9 +79,12 @@ const Home =({navigation:{navigate}})=>{
         <Container>
         
             
-          <QRgenerator onPress={QR}>
+          <QRgenerator onPress={QRgenerate}>
             <QRgeneratorText>QR생성하기</QRgeneratorText>
           </QRgenerator>
+          <QRscanner onPress={QRscan}>
+            <QRscannerText>QR스캔하기</QRscannerText>
+          </QRscanner>
           <Out onPress={SignOut} >
             <OutText>SignOut</OutText>
           </Out>

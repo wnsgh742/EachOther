@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -43,6 +43,10 @@ const MainProfileTextInput = styled.TextInput`
     margin-bottom: 5px;
     
 `;
+const MainProfileText = styled.Text`
+    font-size: 16px;
+    margin-bottom: 5px;
+`;
 const MainProfileButtonView= styled.View`
     flex-direction: row;
 `;
@@ -54,24 +58,37 @@ const Profile =()=>{
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
-    const [address, setAddress] = useState("");
-    
+    const [region, setRegion] = useState("");
+  /*  const [nickNameOk, setNickNameOk] = useState();
+    const [ageOk, setAgeOk] = useState();
+    const [jobOk, setJobOk] = useState();
+    const [regionOk, setRegionOk] = useState();
+    const [saveToggle, setSaveToggle] = useState(false);
+    const Save = ()=>{
+         setSaveToggle(true);
+        
+        } */
     const SaveProfile = ()=>{
         firestore().collection("Profile").add({
             id:UID,
            nickname: nickName,
            age: age,
             job: job,
-           region: address,
+           region: region,
+           date:Date.now(),
         })
-        console.log("aa");
+        console.log("Sucess");
+       
     }
+    useEffect(()=>{
+       
+    },[])
     return(
         <Container>
             <TitleView>
             <Title>Profile</Title>
             </TitleView>
-            <Main>
+           <Main>
             <MainProfileView>
                 <MainProfileImage source={require('../assets/profile.png')}/>
                 <MainProfileTextInputView>
@@ -91,8 +108,8 @@ const Profile =()=>{
                         placeholder="job"
                      />
                     <MainProfileTextInput
-                        value={address}
-                        onChangeText={(text)=>setAddress(text)}
+                        value={region}
+                        onChangeText={(text)=>setRegion(text)}
                         placeholder="Region"
                      />
                 </MainProfileTextInputView>
@@ -102,6 +119,8 @@ const Profile =()=>{
             <MainProfileButton title="수정" color="black"/>
             </MainProfileButtonView>
             </Main>
+            
+            
         </Container>
     )
 }

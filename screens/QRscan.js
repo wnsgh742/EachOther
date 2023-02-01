@@ -9,7 +9,7 @@ const Container = styled.View`
     flex: 1;
 `;
 const Title = styled.Text`
-    font-size: 22;
+    font-size: 22px;
 `;
 const HeaderView = styled.TouchableOpacity`
     flex-direction: row;

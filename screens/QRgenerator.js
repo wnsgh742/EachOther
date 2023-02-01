@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QRCode from "react-native-qrcode-svg";
-import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GREY_COLOR } from "../styled/Colors";
+
 const Container = styled.View`
    
     
@@ -28,7 +27,7 @@ const QRgenerator =({navigation:{navigate}, route})=>{
     route.params[0].age,
     route.params[0].nickname,
     route.params[0].job,
-    route.params[0].address,
+    route.params[0].region,
    
    ]
     const [profile, setProfile] = useState(paramsData);

@@ -90,7 +90,7 @@ const History =({navigation:{navigate}, route})=>{
                 keyExtractor={(item)=>item.date}
                 renderItem={({item})=>(
                     <HistoryView>
-                        <HistoryImage source={require("../assets/profile.png")}/>
+                        <HistoryImage source={{uri:profileData.image.assets[0]?.uri}}/>
                         <HistoryInputView>
                         <HistoryText>{item.nickname}</HistoryText>
                         <HistoryText>{item.age}</HistoryText>

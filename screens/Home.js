@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import QRCode from "react-native-qrcode-svg";
 import styled from "styled-components";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -48,11 +47,11 @@ const Out = styled.TouchableOpacity`
 `;
 const OutText =styled.Text``;
 const Home =({navigation:{navigate}})=>{
-    //const UID = auth().currentUser.uid;
+    const UIDHome = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
     const getProfile = ()=>{
        
-        firestore().collection("Profile")
+        firestore().collection("Profile").where("id","==",UIDHome)
         .get()
         .then((querySnapshot)=>{
             querySnapshot.docs
@@ -62,7 +61,7 @@ const Home =({navigation:{navigate}})=>{
     }
     useEffect(()=>{
         getProfile();
-     
+     console.log(profileData);
     },[])
     
     const QRgenerate = ()=>{

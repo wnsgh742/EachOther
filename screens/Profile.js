@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Alert, Platform } from "react-native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ProfileInfodata from "../assets/ProfileInfodata/ProfileInfodata";
 const Container = styled.View`
     flex:1;
 `;
@@ -15,21 +16,17 @@ const TitleView = styled.View`
     margin-top: 60px;
 `;
 const Title = styled.Text`
-   
-   
-   
     font-size: 43px;
 `;
 const AddTitle = styled.TouchableOpacity`
     margin-right: 10px;
 `;
 const Main = styled.View`
-align-items: center;
+    align-items: center;
 `;
 const MainProfileView = styled.View`
     margin-top: 20px;
     flex-direction: row;
-   
     align-items: center;
     border-radius: 20px;
     width: 310px;
@@ -45,12 +42,10 @@ const MainProfileImage = styled.Image`
 const MainProfileTextInputView = styled.View`
     margin-left: 40px;
     justify-content: center;
-    
 `;
 const MainProfileTextInput = styled.TextInput`
     font-size: 16px;
     margin-bottom: 5px;
-    
 `;
 const MainProfileText = styled.Text`
     font-size: 16px;
@@ -62,11 +57,17 @@ const MainProfileButtonView= styled.View`
 const MainProfileButton = styled.Button`
     
 `;
-const ImageButton = styled.TouchableOpacity``;
+const ImageButton = styled.TouchableOpacity`
+    align-items: center;
+`;
 const ImageButtonText = styled.Text``;
-const ImageSelect = styled.Image`
-    width: 20%;
-    height: 20%;
+const CategorysView = styled.View`
+    align-items: center;
+    justify-content: center;
+    margin-left: 30px;
+`;
+const CategorysText = styled.Text`
+    font-size: 43px;
 `;
 const Profile =()=>{
     const UID = auth().currentUser.uid;
@@ -74,9 +75,8 @@ const Profile =()=>{
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
     const [region, setRegion] = useState("");
-
-    
-        const [profileData, setProfileData] = useState();
+    const [profileData, setProfileData] = useState();
+    const [profileList, setProfileList] = useState(ProfileInfodata);
         const getProfile = ()=>{
            let b = []
             firestore().collection("Profile")
@@ -100,9 +100,7 @@ const Profile =()=>{
            image:response,
            date:Date.now(),
         })
-       
         getProfile();
-       
         console.log("Sucess");
        
     }
@@ -111,13 +109,13 @@ const Profile =()=>{
         console.log("Delete")
         setResponse(null);
         getProfile();
-       
-       
     }
+
     useEffect(()=>{
         getProfile();
-       
+        
     },[])
+
     const [response, setResponse] = useState(null);
     const onSelectImage = () => {
         launchImageLibrary(
@@ -132,7 +130,7 @@ const Profile =()=>{
                 // 취소했을 경우
                 return;
               }
-              console.log(res);
+             
               setResponse(res);
             
           },
@@ -153,14 +151,17 @@ const Profile =()=>{
             {profileData ? 
              <Main>
              <MainProfileView>
+             <ImageButton onPress={onSelectImage}>
                  <MainProfileImage source={{uri:profileData.image.assets[0]?.uri}}/>
+            <ImageButtonText>
+            <Ionicons name="add" color="black" size={22}/>
+            </ImageButtonText>
+          </ImageButton>
                  <MainProfileTextInputView>
                      <MainProfileText>{profileData.nickname}</MainProfileText>
                      <MainProfileText>{profileData.age}</MainProfileText>
                      <MainProfileText>{profileData.job}</MainProfileText>
-                     <MainProfileText>{profileData.region}</MainProfileText>
-                         
-                     
+                     <MainProfileText>{profileData.region}</MainProfileText>  
                  </MainProfileTextInputView>
              </MainProfileView>
              <MainProfileButtonView>
@@ -201,9 +202,9 @@ const Profile =()=>{
             </MainProfileButtonView>
             </Main>
             }
-          <ImageButton onPress={onSelectImage}>
-            <ImageButtonText>Upload Profile Image</ImageButtonText>
-          </ImageButton>
+         <CategorysView>
+            <CategorysText>{profileList[hobby]}</CategorysText>
+         </CategorysView>
          
             
         </Container>

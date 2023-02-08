@@ -3,6 +3,15 @@ import styled from "styled-components";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleSigninConfigure } from "../key";
+import {
+    KakaoOAuthToken,
+    KakaoProfile,
+    getProfile as getKakaoProfile,
+    login,
+    logout,
+    unlink,
+  } from '@react-native-seoul/kakao-login';
+  
 const Container = styled.View`
 
 `;
@@ -15,6 +24,14 @@ const GoogleLoginText = styled.Text``;
 const GoogleImage = styled.Image`
     width: 192px;
     height: 48px;
+`;
+const KakaoLogin = styled.TouchableOpacity`
+    margin-top: 30px;
+    
+`;
+const KakaoLoginText = styled.Text``;
+const KakaoImage = styled.Image`
+   
 `;
 const Email= styled.TextInput`
     width: 200px;
@@ -39,6 +56,7 @@ const BtnText = styled.Text``;
 const Login =()=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [result,setResult]= useState("");
 useEffect(()=>{
     googleSigninConfigure();
 },[])
@@ -53,6 +71,15 @@ const Google = async()=>{
  } catch (err) {
     console.log(err);
  }  
+}
+const Kakao = async()=>{
+    try {
+        const token = await login();
+        setResult(JSON.stringify(token));
+    } catch (err) {
+        console.log(err);
+    }
+   
 }
 const Test = ()=>{
     try {
@@ -75,7 +102,9 @@ const Test = ()=>{
                 source={require('../assets/googleBtn.png')}   
             />
             </GoogleLogin>
-           
+           <KakaoLogin onPress={Kakao}>
+                <KakaoImage source={require('../assets/kakaoBtn.png')}/>
+           </KakaoLogin>
            <Email 
             value={email}
             onChangeText={(text)=>setEmail(text)}

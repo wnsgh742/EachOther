@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components";  
+import CheckBox from '@react-native-community/checkbox';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Alert, Platform } from "react-native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ProfileInfodata from "../assets/ProfileInfodata/ProfileInfodata";
+import CheckboxList from 'rn-checkbox-list';
+
 const Container = styled.View`
     flex:1;
 `;
@@ -61,15 +64,16 @@ const ImageButton = styled.TouchableOpacity`
     align-items: center;
 `;
 const ImageButtonText = styled.Text``;
-const CategorysView = styled.View`
-    align-items: center;
+
+
+const InfoMove = styled.TouchableOpacity`
     justify-content: center;
-    margin-left: 30px;
 `;
-const CategorysText = styled.Text`
-    font-size: 43px;
-`;
-const Profile =()=>{
+const InfoMoveText = styled.Text``;
+
+const ProfileInfoView = styled.View``;
+const ProfileInfoText= styled.Text``;
+const Profile =({navigation:{navigate}})=>{
     const UID = auth().currentUser.uid;
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
@@ -77,6 +81,12 @@ const Profile =()=>{
     const [region, setRegion] = useState("");
     const [profileData, setProfileData] = useState();
     const [profileList, setProfileList] = useState(ProfileInfodata);
+    const [isSelected, setIsSelected] = useState(false);
+
+    const [infoHobby , setInfoHobby] = useState();
+    const [infoLoveValue , setInfoLoveValue] = useState();
+    const [infoTypes , setInfoTypes] = useState();
+    const [infoReligion , setInfoReligion] = useState();
         const getProfile = ()=>{
            let b = []
             firestore().collection("Profile")
@@ -88,7 +98,33 @@ const Profile =()=>{
                setProfileData(b[0]);
                 
             })
+           
+           
 
+        }
+        const getProfileInfo = ()=>{
+            let c = []
+            firestore().collection("Profile").doc(UID).collection("ProfileInfo")
+            .get()
+            .then((querySnapshot)=>{
+                querySnapshot.docs
+                .forEach((doc)=> c.push({...doc.data()}));
+               {c[0].hobby.map(name=>{
+                setInfoHobby(name.name);
+            })}
+            {c[0].loveValue.map(name=>{
+                setInfoLoveValue(name.name);
+            })}
+            {c[0].types.map(name=>{
+                setInfoTypes(name.name);
+            })}
+            {c[0].religion.map(name=>{
+                setInfoReligion(name.name);
+            })}
+                
+              
+               console.log(c[0].hobby[0].name);
+            })
         }
     const SaveProfile = ()=>{
         firestore().collection("Profile").doc(UID).set({
@@ -113,7 +149,7 @@ const Profile =()=>{
 
     useEffect(()=>{
         getProfile();
-        
+       getProfileInfo();
     },[])
 
     const [response, setResponse] = useState(null);
@@ -136,6 +172,9 @@ const Profile =()=>{
           },
         );
       };
+      const Info = ()=>{
+        navigate("InNav",{screen:"ProfileInfo"});
+      }
     return(
         <Container>
             <TitleView>
@@ -172,6 +211,13 @@ const Profile =()=>{
             :
             <Main>
             <MainProfileView>
+            <ImageButton onPress={onSelectImage}>
+               
+                 
+            <ImageButtonText>
+            <Ionicons name="add" color="black" size={22}/>
+            </ImageButtonText>
+          </ImageButton>
                 <MainProfileImage source={{uri:response?.assets[0]?.uri}}/>
                 <MainProfileTextInputView>
                     <MainProfileTextInput 
@@ -202,11 +248,17 @@ const Profile =()=>{
             </MainProfileButtonView>
             </Main>
             }
-         <CategorysView>
-            <CategorysText>{profileList[hobby]}</CategorysText>
-         </CategorysView>
-         
-            
+            <InfoMove onPress={Info}>
+                <InfoMoveText>상세설정</InfoMoveText>
+            </InfoMove>
+        
+          <ProfileInfoView>
+            <ProfileInfoText>{infoHobby}</ProfileInfoText>
+            <ProfileInfoText>{infoLoveValue}</ProfileInfoText>
+            <ProfileInfoText>{infoTypes}</ProfileInfoText>
+            <ProfileInfoText>{infoReligion}</ProfileInfoText>
+          </ProfileInfoView>
+
         </Container>
     )
 }

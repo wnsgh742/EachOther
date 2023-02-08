@@ -58,6 +58,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
+	
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>

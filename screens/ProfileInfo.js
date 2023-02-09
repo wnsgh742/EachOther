@@ -31,15 +31,13 @@ const ProfileInfo = ({navigation:{navigate, goBack}})=>{
     const [loveValue, setLoveValue] = useState([]);
     const [types, setTypes] = useState([]);
     const [religion, setReligion] = useState([]);
+    const [info, setInfo] = useState([]);
     const [hobby2, setHobby2] = useState();
     const HomeBack = ()=>{
       goBack();
        }
 
        const InfoSave = ()=>{
-      
- 
-        
         firestore().collection("Profile").doc(UID).collection("ProfileInfo").doc(UID).set({
             id:UID,
           hobby:hobby,
@@ -48,7 +46,8 @@ const ProfileInfo = ({navigation:{navigate, goBack}})=>{
           religion:religion,
         })
        
-       
+
+        goBack();   
        }
 
        useEffect(()=>{

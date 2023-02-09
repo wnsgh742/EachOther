@@ -27,7 +27,7 @@ const QRgenerator =({navigation:{navigate}, route})=>{
     route.params[0].age,
     route.params[0].nickname,
     route.params[0].job,
-    route.params[0].region,
+    route.params[0].religion,
    
    ]
     const [profile, setProfile] = useState(paramsData);

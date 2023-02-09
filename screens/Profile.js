@@ -73,15 +73,15 @@ const InfoMoveText = styled.Text``;
 
 const ProfileInfoView = styled.View``;
 const ProfileInfoText= styled.Text``;
-const Profile =({navigation:{navigate}})=>{
+const Profile =({navigation:{navigate},route})=>{
     const UID = auth().currentUser.uid;
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
-    const [region, setRegion] = useState("");
+    const [religion, setReligion] = useState("");
     const [profileData, setProfileData] = useState();
     const [profileList, setProfileList] = useState(ProfileInfodata);
-    const [isSelected, setIsSelected] = useState(false);
+    const [editToggle, setEditToggle] = useState(true);
 
     const [infoHobby , setInfoHobby] = useState();
     const [infoLoveValue , setInfoLoveValue] = useState();
@@ -94,7 +94,7 @@ const Profile =({navigation:{navigate}})=>{
             .then((querySnapshot)=>{
                 querySnapshot.docs
                 .forEach((doc)=>b.push({...doc.data()}));
-               // console.log(b);
+              
                setProfileData(b[0]);
                 
             })
@@ -104,52 +104,98 @@ const Profile =({navigation:{navigate}})=>{
         }
         const getProfileInfo = ()=>{
             let c = []
+           
+            firestore().collection("Profile").doc(UID).collection("ProfileInfo")
+            .onSnapshot((snapshot)=>{
+                c = snapshot.docs.map((doc)=>({
+                    ...doc.data(),
+                    
+                })
+                    
+                );
+            
+               if(c[0] !== undefined || c[1] !== undefined || c[2] !== undefined|| c[3] !== undefined){
+                c[0].hobby.map((name)=>{
+                    setInfoHobby(name.name);
+                })
+                c[0].loveValue.map((name)=>{
+                  setInfoLoveValue(name.name);
+                })
+                c[0].types.map((name)=>{
+                  setInfoTypes(name.name);
+                })
+                c[0].religion.map((name)=>{
+                   setInfoReligion(name.name);
+                })
+               }else{
+                console.log("not");
+               }
+                
+                    
+              
+            })
+        }
+       /* const test = ()=>{
+            let c = []
+            let d = []
+            
             firestore().collection("Profile").doc(UID).collection("ProfileInfo")
             .get()
             .then((querySnapshot)=>{
                 querySnapshot.docs
                 .forEach((doc)=> c.push({...doc.data()}));
-               {c[0].hobby.map(name=>{
-                setInfoHobby(name.name);
-            })}
-            {c[0].loveValue.map(name=>{
-                setInfoLoveValue(name.name);
-            })}
-            {c[0].types.map(name=>{
-                setInfoTypes(name.name);
-            })}
-            {c[0].religion.map(name=>{
-                setInfoReligion(name.name);
-            })}
-                
+                c[0].hobby.map((name)=>{
+                    d.push(name.name);
+                })
+                c[0].loveValue.map((name)=>{
+                   d.push(name.name)
+                })
+                c[0].types.map((name)=>{
+                   d.push(name.name)
+                })
+                c[0].religion.map((name)=>{
+                   d.push(name.name);
+                })
+            
+               setInfoData(d);
               
-               console.log(c[0].hobby[0].name);
+              
             })
-        }
+        } */
     const SaveProfile = ()=>{
+      
         firestore().collection("Profile").doc(UID).set({
             id:UID,
            nickname: nickName,
            age: age,
             job: job,
-           region: region,
+           religion: religion,
            image:response,
            date:Date.now(),
         })
+        setEditToggle(true);
         getProfile();
         console.log("Sucess");
        
+        
+       
     }
+    
     const EditProfile = ()=>{
-        firestore().collection("Profile").doc(UID).delete();
+        setEditToggle(false);
+      /* firestore().collection("Profile").doc(UID).delete();
         console.log("Delete")
-        setResponse(null);
+        setResponse(null); */
         getProfile();
     }
 
     useEffect(()=>{
         getProfile();
-       getProfileInfo();
+        
+            getProfileInfo();
+        
+      
+      // test();
     },[])
 
     const [response, setResponse] = useState(null);
@@ -171,6 +217,7 @@ const Profile =({navigation:{navigate}})=>{
             
           },
         );
+        
       };
       const Info = ()=>{
         navigate("InNav",{screen:"ProfileInfo"});
@@ -187,20 +234,23 @@ const Profile =({navigation:{navigate}})=>{
                 <Ionicons name="add" color="black" size={55}/>
             </AddTitle>
             </TitleView>
-            {profileData ? 
+            {profileData && editToggle ? 
              <Main>
              <MainProfileView>
              <ImageButton onPress={onSelectImage}>
-                 <MainProfileImage source={{uri:profileData.image.assets[0]?.uri}}/>
-            <ImageButtonText>
-            <Ionicons name="add" color="black" size={22}/>
-            </ImageButtonText>
+                {profileData.image == null ?
+                <MainProfileImage source={require("../assets/profile.png")}/>
+                 :
+                 <MainProfileImage source={{uri:profileData.image.assets[0]?.uri}}/> 
+                 }
+                 
+            
           </ImageButton>
                  <MainProfileTextInputView>
                      <MainProfileText>{profileData.nickname}</MainProfileText>
                      <MainProfileText>{profileData.age}</MainProfileText>
                      <MainProfileText>{profileData.job}</MainProfileText>
-                     <MainProfileText>{profileData.region}</MainProfileText>  
+                     <MainProfileText>{profileData.religion}</MainProfileText>  
                  </MainProfileTextInputView>
              </MainProfileView>
              <MainProfileButtonView>
@@ -236,8 +286,8 @@ const Profile =({navigation:{navigate}})=>{
                         placeholder="job"
                      />
                     <MainProfileTextInput
-                        value={region}
-                        onChangeText={(text)=>setRegion(text)}
+                        value={religion}
+                        onChangeText={(text)=>setReligion(text)}
                         placeholder="Region"
                      />
                 </MainProfileTextInputView>

@@ -41,6 +41,7 @@ const HistoryImage = styled.Image`
     width: 104px;
     height: 104px;
     margin-left: 15px;
+    border-radius: 40px;
 `;
 const SwipeHiddenItemContainer = styled.View`
     flex: 1;
@@ -65,6 +66,7 @@ const SwipeHiddenItemText = styled.Text`
     font-size: 14px;
 `;
 const History =({navigation:{navigate}, route})=>{
+    const UID = auth().currentUser.uid;
     const userObj = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
 
@@ -92,7 +94,8 @@ const History =({navigation:{navigate}, route})=>{
         navigate("Home");
        }
     const Delete = ()=>{
-
+        firestore().collection("Profile").doc(UID).delete();
+        console.log("delete");
     }
     const MoveInfo = ()=>{
         navigate("InNav",{screen:"HistoryInfo", params:profileData});
@@ -107,7 +110,11 @@ const History =({navigation:{navigate}, route})=>{
                  data={profileData}
                  renderItem={({item})=>(
                     <HistoryView onPress={MoveInfo}>
-                        <HistoryImage source={{uri:item.image.assets[0].uri}}/>
+                        {item.image == null 
+                        ? <HistoryImage source={require("../assets/profile.png")}/>
+                         :  <HistoryImage source={{uri:item.image.assets[0].uri}}/>
+                          }
+                       
                         <HistoryInputView>
                         <HistoryText>{item.nickname}</HistoryText>
                         <HistoryText>{item.age}</HistoryText>

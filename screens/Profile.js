@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";  
-import CheckBox from '@react-native-community/checkbox';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Alert, Platform } from "react-native";
+import { Alert, FlatList, Platform } from "react-native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ProfileInfodata from "../assets/ProfileInfodata/ProfileInfodata";
-import CheckboxList from 'rn-checkbox-list';
+
 
 const Container = styled.View`
     flex:1;
@@ -40,7 +39,7 @@ const MainProfileView = styled.View`
 const MainProfileImage = styled.Image`
     width: 104px;
     height: 104px;
-    border-radius: 45px;
+    border-radius: 40px;
 `;
 const MainProfileTextInputView = styled.View`
     margin-left: 40px;
@@ -68,25 +67,57 @@ const ImageButtonText = styled.Text``;
 
 const InfoMove = styled.TouchableOpacity`
     justify-content: center;
+    align-items: center;
+    margin-top: 10px;
 `;
-const InfoMoveText = styled.Text``;
+const InfoMoveText = styled.Text`
+    font-weight: bold;
+    font-size: 22px;
+`;
+const Wrapper = styled.View`
+    align-items: center;
+`;
+const ProfileInfoView = styled.View`
+     width: 310px;
+    height: 187px;
+  justify-content: center;
+    border-radius: 20px;
+    border-color: ${(props)=>props.theme.textColor};
+    border: 5px;
+    background-color: ${(props)=> props.theme.mainBgColor};
+    margin-top: 20px;
+`;
+const ProfileInfoSection1 = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;
 
-const ProfileInfoView = styled.View``;
-const ProfileInfoText= styled.Text``;
+const ProfileInfoSection2 = styled.View`
+    margin-top: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const ProfileInfoText= styled.Text`
+    
+`;
+
 const Profile =({navigation:{navigate},route})=>{
     const UID = auth().currentUser.uid;
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
-    const [religion, setReligion] = useState("");
+    const [region, setRegion] = useState("");
     const [profileData, setProfileData] = useState();
     const [profileList, setProfileList] = useState(ProfileInfodata);
     const [editToggle, setEditToggle] = useState(true);
 
-    const [infoHobby , setInfoHobby] = useState();
-    const [infoLoveValue , setInfoLoveValue] = useState();
-    const [infoTypes , setInfoTypes] = useState();
-    const [infoReligion , setInfoReligion] = useState();
+    const [infoHobby , setInfoHobby] = useState([]);
+    const [infoLoveValue , setInfoLoveValue] = useState([]);
+    const [infoTypes , setInfoTypes] = useState([]);
+    const [infoReligion , setInfoReligion] = useState([]);
+    
         const getProfile = ()=>{
            let b = []
             firestore().collection("Profile")
@@ -98,40 +129,28 @@ const Profile =({navigation:{navigate},route})=>{
                setProfileData(b[0]);
                 
             })
-           
-           
-
         }
         const getProfileInfo = ()=>{
             let c = []
-           
             firestore().collection("Profile").doc(UID).collection("ProfileInfo")
             .onSnapshot((snapshot)=>{
                 c = snapshot.docs.map((doc)=>({
                     ...doc.data(),
-                    
                 })
-                    
-                );
-            
+               
+                  );
+                  
                if(c[0] !== undefined || c[1] !== undefined || c[2] !== undefined|| c[3] !== undefined){
-                c[0].hobby.map((name)=>{
-                    setInfoHobby(name.name);
-                })
-                c[0].loveValue.map((name)=>{
-                  setInfoLoveValue(name.name);
-                })
-                c[0].types.map((name)=>{
-                  setInfoTypes(name.name);
-                })
-                c[0].religion.map((name)=>{
-                   setInfoReligion(name.name);
-                })
+                setInfoHobby(c[0].hobby);
+                setInfoLoveValue(c[0].loveValue);
+                setInfoTypes(c[0].types);
+                setInfoReligion(c[0].religion);
+               
                }else{
                 console.log("not");
                }
                 
-                    
+                   
               
             })
         }
@@ -169,7 +188,7 @@ const Profile =({navigation:{navigate},route})=>{
            nickname: nickName,
            age: age,
             job: job,
-           religion: religion,
+           region: region,
            image:response,
            date:Date.now(),
         })
@@ -250,7 +269,7 @@ const Profile =({navigation:{navigate},route})=>{
                      <MainProfileText>{profileData.nickname}</MainProfileText>
                      <MainProfileText>{profileData.age}</MainProfileText>
                      <MainProfileText>{profileData.job}</MainProfileText>
-                     <MainProfileText>{profileData.religion}</MainProfileText>  
+                     <MainProfileText>{profileData.region}</MainProfileText>  
                  </MainProfileTextInputView>
              </MainProfileView>
              <MainProfileButtonView>
@@ -286,8 +305,8 @@ const Profile =({navigation:{navigate},route})=>{
                         placeholder="job"
                      />
                     <MainProfileTextInput
-                        value={religion}
-                        onChangeText={(text)=>setReligion(text)}
+                        value={region}
+                        onChangeText={(text)=>setRegion(text)}
                         placeholder="Region"
                      />
                 </MainProfileTextInputView>
@@ -301,14 +320,31 @@ const Profile =({navigation:{navigate},route})=>{
             <InfoMove onPress={Info}>
                 <InfoMoveText>상세설정</InfoMoveText>
             </InfoMove>
-        
+        <Wrapper>
           <ProfileInfoView>
-            <ProfileInfoText>{infoHobby}</ProfileInfoText>
-            <ProfileInfoText>{infoLoveValue}</ProfileInfoText>
-            <ProfileInfoText>{infoTypes}</ProfileInfoText>
-            <ProfileInfoText>{infoReligion}</ProfileInfoText>
-          </ProfileInfoView>
+         
+           <ProfileInfoSection1>
+           {infoHobby.map((item)=>(
+                <ProfileInfoText key={item.id}>{item.name}</ProfileInfoText> 
+            ))}
+           {infoLoveValue.map((item)=>(
+                <ProfileInfoText key={item.id}>{item.name}</ProfileInfoText> 
+            ))} 
+            
+          
+            </ProfileInfoSection1>
 
+            <ProfileInfoSection2>
+            {infoTypes.map((item)=>(
+                <ProfileInfoText key={item.id}>{item.name}</ProfileInfoText> 
+            ))}
+            {infoReligion.map((item)=>(
+                <ProfileInfoText key={item.id}>{item.name}</ProfileInfoText> 
+            ))}
+            </ProfileInfoSection2>
+
+          </ProfileInfoView>
+          </Wrapper>
         </Container>
     )
 }

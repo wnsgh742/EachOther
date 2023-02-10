@@ -24,7 +24,7 @@ const ScannerView = styled.TouchableOpacity``;
 const ScannerText = styled.Text``;
 const QRscan =({navigation:{navigate}})=>{
     const [scaned, setScaned] = useState(true);
-  const ref = useRef(null);
+    const ref = useRef(null);
     const HomeBack = ()=>{
         navigate("Home");
        }
@@ -41,6 +41,7 @@ const QRscan =({navigation:{navigate}})=>{
           { text: "OK", onPress: () => setScaned(true) },
         ]);
       };
+      
        useEffect(()=>{
         setScaned(true);
        },[])

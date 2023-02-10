@@ -78,6 +78,7 @@ const ProfileInfo = ({navigation:{navigate, goBack}})=>{
                   backgroundColor: 'white',
                   padding: 10,
                 }}
+                
                 selectedListItems={hobby}
                  theme="red"
                  listItemStyle={{ borderBottomColor: '#eee', }}

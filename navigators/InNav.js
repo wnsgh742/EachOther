@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import Chat from "../screens/Chat";
 import EditProfile from "../screens/EditProfile";
 import HistoryInfo from "../screens/HistoryInfo";
 import ProfileInfo from "../screens/ProfileInfo";
@@ -16,6 +17,7 @@ const InNav = ()=>{
            <Nav.Screen name="QRscan" component={QRscan} />
            <Nav.Screen name="ProfileInfo" component={ProfileInfo} options={{presentation:"modal"}} />
            <Nav.Screen name="HistoryInfo" component={HistoryInfo}/>
+           <Nav.Screen name="Chat" component={Chat}/>
         </Nav.Navigator>
     )
 }

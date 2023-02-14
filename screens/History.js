@@ -47,10 +47,8 @@ const SwipeHiddenItemContainer = styled.View`
     flex: 1;
     align-items: center;
     justify-content: space-between;
-   
     flex-direction: row;
     height: 100%;
-
 `;
 const SwipeHiddenItem = styled.TouchableOpacity`
     width: 70px;
@@ -102,7 +100,6 @@ const History =({navigation:{navigate}, route})=>{
     }
     return(
         <Container>
-             
             <TitleView>
             <Title>History</Title>
             </TitleView>

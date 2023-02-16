@@ -43,12 +43,38 @@ const QRscannerText = styled.Text`
     border-color: black;
 `;
 const Out = styled.TouchableOpacity`
-    
+     background-color: ${(props)=> props.theme.btnColor};
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border-radius: 15px;
+    width: 250px;
+    height: 60px;
 `;
-const OutText =styled.Text``;
+const OutText =styled.Text`
+   font-size: 30px;
+    color: white;
+    border-color: black;
+`;
+const ChatView = styled.TouchableOpacity`
+   background-color: ${(props)=> props.theme.btnColor};
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border-radius: 15px;
+    width: 250px;
+    height: 60px;
+`;
+const ChatText = styled.Text`
+   font-size: 30px;
+    color: white;
+    border-color: black;
+`;
 const Home =({navigation:{navigate}})=>{
+  
     const UIDHome = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
+    const [chat , setChat] = useState();
     const getProfile = ()=>{
        
         firestore().collection("Profile").where("id","==",UIDHome)
@@ -59,9 +85,21 @@ const Home =({navigation:{navigate}})=>{
         })  
       
     }
+    const getChat = ()=>{
+      let a = []
+      firestore().collection("Profile").doc(UIDHome).collection("ProfileChat")
+      .onSnapshot((snapshot)=>{
+        snapshot.docs
+        .forEach((doc)=>{
+          a.push({...doc.data()});
+          setChat(a);
+        })
+      })
+    }
     useEffect(()=>{
         getProfile();
-     console.log(profileData);
+        getChat();
+      console.log(profileData);
     },[])
     
     const QRgenerate = ()=>{
@@ -72,6 +110,9 @@ const Home =({navigation:{navigate}})=>{
     }
     const SignOut = ()=>{
         auth().signOut();
+    }
+    const MoveChat = ()=>{
+      navigate("InNav",{screen:"Chatting", params:[profileData]})
     }
    
     return(
@@ -84,7 +125,15 @@ const Home =({navigation:{navigate}})=>{
           <QRscanner onPress={QRscan}>
             <QRscannerText>QR스캔하기</QRscannerText>
           </QRscanner>
-          <Out onPress={SignOut} >
+          
+          {chat ?
+          <ChatView onPress={MoveChat}>
+        <ChatText>ChatGO</ChatText>
+      </ChatView> 
+      :
+            null
+      }
+      <Out onPress={SignOut} >
             <OutText>SignOut</OutText>
           </Out>
         </Container>

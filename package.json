@@ -36,10 +36,12 @@
     "react-native-screens": "^3.18.2",
     "react-native-svg": "^13.7.0",
     "react-native-swipe-list-view": "^3.2.9",
+    "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.2.0",
     "request-promise": "^4.2.6",
     "rn-checkbox-list": "^1.2.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

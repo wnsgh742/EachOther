@@ -120,19 +120,18 @@ const Profile =({navigation:{navigate},route})=>{
     
         const getProfile = ()=>{
            let b = []
-            firestore().collection("Profile")
-            .get()
-            .then((querySnapshot)=>{
-                querySnapshot.docs
+            firestore().collection("Profile").where("id","==",UID)
+            .onSnapshot((snapshot)=>{
+                snapshot.docs
                 .forEach((doc)=>b.push({...doc.data()}));
               
                setProfileData(b[0]);
-                
             })
+           
         }
         const getProfileInfo = ()=>{
             let c = []
-            firestore().collection("Profile").doc(UID).collection("ProfileInfo")
+            firestore().collection("Profile").doc(UID).collection("ProfileInfo").where("id","==",UID)
             .onSnapshot((snapshot)=>{
                 c = snapshot.docs.map((doc)=>({
                     ...doc.data(),
@@ -213,7 +212,7 @@ const Profile =({navigation:{navigate},route})=>{
         
             getProfileInfo();
         
-      
+     console.log(profileData);
       // test();
     },[])
 

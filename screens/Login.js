@@ -76,6 +76,7 @@ const Kakao = async()=>{
     try {
         const token = await login();
         setResult(JSON.stringify(token));
+        
     } catch (err) {
         console.log(err);
     }
@@ -89,6 +90,13 @@ const Test = ()=>{
         console.log(err);
     }
    
+}
+const Login = ()=>{
+    try{
+        auth().signInWithEmailAndPassword(email,password);
+    }catch(err){
+        console.log(err);
+    }
 }
 
     return(
@@ -115,6 +123,9 @@ const Test = ()=>{
            />
            <Btn onPress={Test}>
             <BtnText>확인</BtnText>
+           </Btn>
+           <Btn onPress={Login}>
+            <BtnText>로그인</BtnText>
            </Btn>
         </Container>
     )

@@ -22,21 +22,13 @@ const HeaderText = styled.Text`
 const HeaderChatView = styled.TouchableOpacity``;
 const HeaderChatText = styled.Text``;
 
-const Chat = ({navigation:{navigate,goBack}, route}) => {
-    const ChoiceUser = route.params.params[0];
+const Chatting = ({navigation:{navigate,goBack}, route}) => {
+    const ChoiceUser = route.params[0].id;
    console.log(ChoiceUser);
     console.log(UIDChat);
     const UIDChat = auth().currentUser.uid;
     const [messages, setMessages] = useState([]);
-    const infoData = [
-       { age:route.params.params[1]},
-       { nickname : route.params.params[2]},
-       { job:route.params.params[3]},
-       { region:route.params.params[4]},
-       {image :route.params.params[5]},
-       {id :route.params.params[0]},
-    ]
-
+   
     const getChat = ()=>{
         firestore().collection("Profile").doc(ChoiceUser).collection("ProfileChat").orderBy('createdAt', 'desc')
         .onSnapshot((snapshot) =>
@@ -55,7 +47,7 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
 
     useEffect(() => {
         getChat();
-      console.log(UIDChat);
+ 
       }, [])
     
       const onSend = useCallback((messages = []) => {
@@ -82,8 +74,8 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
             <GiftedChat
                 messages={messages}
                 onSend={messages => onSend(messages)}
-               placeholder=""
-               alwaysShowSend={true}
+                placeholder=""
+                alwaysShowSend={true}
                 user={{
                     _id: UIDChat,
                     name: auth().currentUser.displayName,
@@ -94,4 +86,4 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
         </Container>
     )
 }
-export default Chat;
+export default Chatting;

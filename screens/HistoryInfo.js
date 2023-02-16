@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components"
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import uuid from 'react-native-uuid';
 const Container = styled.View`
     flex: 1;
 `;
@@ -26,14 +27,14 @@ const HistoryInfo = ({navigation:{navigate,goBack}, route})=>{
         route.params[0].nickname,
         route.params[0].job,
         route.params[0].region,
-        route.params[0].image.assets[0].uri,
+        route.params[0].image,
        ]
        const [infoData,setInfoData] = useState(paramsData);
     const HomeBack = ()=>{
         goBack();
     }
     useEffect(()=>{
-      console.log(  route.params[0].image.assets[0].uri);
+      console.log(infoData);
     },[])
     const ChatMove = ()=>{
         navigate("Chat",{params:infoData});

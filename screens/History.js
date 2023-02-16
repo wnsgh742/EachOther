@@ -71,29 +71,29 @@ const History =({navigation:{navigate}, route})=>{
     const getProfile = ()=>{
        let b = []
         firestore().collection("Profile").where("id","==",userObj)
-        .get()
-        .then((querySnapshot)=>{
-            querySnapshot.docs
-            .forEach((doc)=>{
+        .onSnapshot((snapshot)=>{
+            snapshot.docs.forEach((doc)=>{
                 b.push({
-                   ...doc.data(),
+                    ...doc.data(),
                 })
-               setProfileData(b);
-               console.log(profileData);
+                setProfileData(b);
+                console.log(profileData);
             })
-        })  
+        }) 
     }
 
     useEffect(()=>{
         getProfile();
-      
+      console.log(profileData)
     },[])
     const HomeBack = ()=>{
         navigate("Home");
        }
     const Delete = ()=>{
-        firestore().collection("Profile").doc(UID).delete();
+        firestore().collection("Profile")
+        .doc(UID).delete();
         console.log("delete");
+       
     }
     const MoveInfo = ()=>{
         navigate("InNav",{screen:"HistoryInfo", params:profileData});

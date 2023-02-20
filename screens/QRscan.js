@@ -22,8 +22,9 @@ const CameraView = styled.View`
 `;
 const ScannerView = styled.TouchableOpacity``;
 const ScannerText = styled.Text``;
-const QRscan =({navigation:{navigate}})=>{
+const QRscan =({navigation:{navigate, goBack}})=>{
     const [scaned, setScaned] = useState(true);
+    const [scanData, setScanData] = useState();
     const ref = useRef(null);
     const HomeBack = ()=>{
         navigate("Home");
@@ -33,15 +34,29 @@ const QRscan =({navigation:{navigate}})=>{
                 console.error(err)
                 )
        }
-       const onBarCodeRead = () => {
-        if (!scaned) return;
+       const onBarCodeRead = (e) => {
+        if (!scaned) {
+            setScanData({
+                result:e,
+            })
+          //  navigate("InNav", {screen:"History"});
+           console.log(e.data);
+            return;
+        }
+       
         setScaned(false);
         Vibration.vibrate();
         Alert.alert("QR Code", event.nativeEvent.codeStringValue, [
-          { text: "OK", onPress: () => setScaned(true) },
+          { text: "OK", onPress: () => 
+          setScaned(true)
+          
+        },
         ]);
+       
       };
-      
+      const onBottomButtonPressed = ()=>{
+        goBack();
+      }
        useEffect(()=>{
         setScaned(true);
        },[])
@@ -68,7 +83,7 @@ const QRscan =({navigation:{navigate}})=>{
 <CameraView>
 <CameraScreen
   actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
-  onBottomButtonPressed={(event) => this.onBottomButtonPressed(event)}
+  onBottomButtonPressed={() => onBottomButtonPressed()}
   //flashImages={{
    // on: require('path/to/image'),
    // off: require('path/to/image'),

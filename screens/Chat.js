@@ -27,6 +27,9 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
    console.log(ChoiceUser);
     console.log(UIDChat);
     const UIDChat = auth().currentUser.uid;
+    
+        
+    
     const [messages, setMessages] = useState([]);
     const infoData = [
        { age:route.params.params[1]},
@@ -38,7 +41,8 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
     ]
 
     const getChat = ()=>{
-        firestore().collection("Profile").doc(ChoiceUser).collection("ProfileChat").orderBy('createdAt', 'desc')
+        const CombinedId = UIDChat > ChoiceUser ? UIDChat+ChoiceUser: ChoiceUser+UIDChat;
+        firestore().collection("chat").doc(CombinedId).collection("ProfileChat").orderBy('createdAt', 'desc')
         .onSnapshot((snapshot) =>
             setMessages(
                 snapshot.docs.map(doc =>({
@@ -59,9 +63,10 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
       }, [])
     
       const onSend = useCallback((messages = []) => {
-      //  setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+       // setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+        const CombinedId = UIDChat > ChoiceUser ? UIDChat+ChoiceUser: ChoiceUser+UIDChat;
         const { _id, createdAt, text, user,} = messages[0]
-      firestore().collection("Profile").doc(ChoiceUser).collection("ProfileChat").add({ _id, createdAt,  text, user });
+      firestore().collection("chat").doc(CombinedId).collection("ProfileChat").add({ _id, createdAt,  text, user });
   
       }, [])
    
@@ -86,6 +91,7 @@ const Chat = ({navigation:{navigate,goBack}, route}) => {
                alwaysShowSend={true}
                 user={{
                     _id: UIDChat,
+                    choiceuser : ChoiceUser,
                     name: auth().currentUser.displayName,
                     
                 }}

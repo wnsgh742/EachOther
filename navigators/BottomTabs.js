@@ -8,6 +8,7 @@ import History from "../screens/History";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import { FIRST_DATE, GREY_COLOR } from "../styled/Colors";
+import MessageList from "../screens/MessageList";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +30,12 @@ const BottomTabs=()=>{
                 tabBarIcon:({focused,size,color})=>{
                     
                     return (<Icon name="home-outline" size={32} color={color} />)
+                }
+            }}/>
+            <Tab.Screen name="Message" component={MessageList} options={{
+                tabBarIcon:({focused,size,color})=>{
+                    
+                    return (<MaterialCommunityIcons name="message-processing-outline" size={32} color={color} />)
                 }
             }}/>
             <Tab.Screen name="History" component={History} options={{

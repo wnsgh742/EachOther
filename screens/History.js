@@ -70,7 +70,7 @@ const History =({navigation:{navigate}, route})=>{
 
     const getProfile = ()=>{
        let b = []
-        firestore().collection("Profile").where("id","==",userObj)
+        firestore().collection("Profile")//.where("id","==",userObj)
         .onSnapshot((snapshot)=>{
             snapshot.docs.forEach((doc)=>{
                 b.push({

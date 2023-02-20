@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { FlatList } from "react-native";
+import LogContext from "../contexts/LogContext";
 const Container = styled.View`
   align-items: center;
     justify-content: center;
@@ -71,7 +73,7 @@ const ChatText = styled.Text`
     border-color: black;
 `;
 const Home =({navigation:{navigate}})=>{
-  
+    const {LogUser} = useContext(LogContext);
     const UIDHome = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
     const [chat , setChat] = useState();
@@ -87,19 +89,24 @@ const Home =({navigation:{navigate}})=>{
     }
     const getChat = ()=>{
       let a = []
-      firestore().collection("Profile").doc(UIDHome).collection("ProfileChat")
+   //   const CombinedId = profileData.id > UIDHome ? profileData.id+UIDHome:UIDHome+profileData.id;
+      const CombinedId = UIDHome > profileData.id ? UIDHome+profileData.id: profileData.id+UIDHome;
+      
+      firestore().collection("chat").doc(CombinedId).collection("ProfileChat")
       .onSnapshot((snapshot)=>{
         snapshot.docs
         .forEach((doc)=>{
           a.push({...doc.data()});
-          setChat(a);
+        setChat(a);
         })
       })
+     
+     
     }
     useEffect(()=>{
         getProfile();
         getChat();
-      console.log(profileData);
+     console.log(chat);
     },[])
     
     const QRgenerate = ()=>{
@@ -125,17 +132,24 @@ const Home =({navigation:{navigate}})=>{
           <QRscanner onPress={QRscan}>
             <QRscannerText>QR스캔하기</QRscannerText>
           </QRscanner>
-          
+          <Out onPress={SignOut} >
+            <OutText>SignOut</OutText>
+          </Out>
           {chat ?
-          <ChatView onPress={MoveChat}>
-        <ChatText>ChatGO</ChatText>
-      </ChatView> 
+        <FlatList 
+          data={chat}
+         
+          renderItem={(item)=>(
+            <ChatView onPress={MoveChat}>
+            <ChatText>{item.text}</ChatText>
+            </ChatView> 
+       )}
+        />
+    
       :
             null
       }
-      <Out onPress={SignOut} >
-            <OutText>SignOut</OutText>
-          </Out>
+    
         </Container>
     )
 }

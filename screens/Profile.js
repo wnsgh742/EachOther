@@ -97,10 +97,12 @@ const ProfileInfoSection2 = styled.View`
     margin-top: 20px;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 `;
 
 const ProfileInfoText= styled.Text`
-    
+    font-size: 16px;
+    font-weight: 500;
 `;
 
 const Profile =({navigation:{navigate},route})=>{

@@ -30,7 +30,7 @@ const Chatting = ({navigation:{navigate,goBack}, route}) => {
     const [messages, setMessages] = useState([]);
    
     const getChat = ()=>{
-        firestore().collection("Profile").doc(ChoiceUser).collection("ProfileChat").orderBy('createdAt', 'desc')
+        firestore().collection("chat").doc(ChoiceUser).collection("ProfileChat").orderBy('createdAt', 'desc')
         .onSnapshot((snapshot) =>
             setMessages(
                 snapshot.docs.map(doc =>({
@@ -53,7 +53,7 @@ const Chatting = ({navigation:{navigate,goBack}, route}) => {
       const onSend = useCallback((messages = []) => {
       //  setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
         const { _id, createdAt, text, user,} = messages[0]
-      firestore().collection("Profile").doc(ChoiceUser).collection("ProfileChat").add({ _id, createdAt,  text, user });
+      firestore().collection("chat").doc(ChoiceUser).collection("ProfileChat").add({ _id, createdAt,  text, user });
   
       }, [])
    

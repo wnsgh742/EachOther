@@ -23,9 +23,7 @@ const HeaderChatView = styled.TouchableOpacity``;
 const HeaderChatText = styled.Text``;
 
 const Chatting = ({navigation:{navigate,goBack}, route}) => {
-    const ChoiceUser = route.params[0].id;
-   console.log(ChoiceUser);
-    console.log(UIDChat);
+    const ChoiceUser = route.params.item.targetId;
     const UIDChat = auth().currentUser.uid;
     const [messages, setMessages] = useState([]);
    
@@ -42,12 +40,12 @@ const Chatting = ({navigation:{navigate,goBack}, route}) => {
             )
           
         )
-       console.log(messages.user);
+     
     }
 
     useEffect(() => {
         getChat();
- 
+     
       }, [])
     
       const onSend = useCallback((messages = []) => {
@@ -67,7 +65,7 @@ const Chatting = ({navigation:{navigate,goBack}, route}) => {
                 <Ionicons name="chevron-back-outline" size={24} color="black" />
                 <HeaderText>Chat</HeaderText>
                 <HeaderChatView >
-                <HeaderText>Chat</HeaderText>
+            
                 </HeaderChatView>
             </HeaderView>
 

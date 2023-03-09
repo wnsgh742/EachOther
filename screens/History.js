@@ -17,7 +17,7 @@ const Title = styled.Text`
     margin-top: 10px;
     font-size: 43px;
 `;
-
+const Wrapper = styled.TouchableOpacity``;
 const HistoryView = styled.TouchableOpacity`
     margin-top: 20px;
     flex-direction: row;
@@ -77,14 +77,14 @@ const History =({navigation:{navigate}, route})=>{
                     ...doc.data(),
                 })
                 setProfileData(b);
-                console.log(profileData);
+               
             })
         }) 
     }
 
     useEffect(()=>{
         getProfile();
-      console.log(profileData)
+     
     },[])
     const HomeBack = ()=>{
         navigate("Home");
@@ -95,8 +95,8 @@ const History =({navigation:{navigate}, route})=>{
         console.log("delete");
        
     }
-    const MoveInfo = ()=>{
-        navigate("InNav",{screen:"HistoryInfo", params:profileData});
+    const MoveInfo = ({item})=>{
+        navigate("InNav",{screen:"HistoryInfo",params:{item}});
     }
     return(
         <Container>
@@ -105,8 +105,10 @@ const History =({navigation:{navigate}, route})=>{
             </TitleView>
             <SwipeListView 
                  data={profileData}
+                 keyExtractor={(item)=>item.id}
                  renderItem={({item})=>(
-                    <HistoryView onPress={MoveInfo}>
+                
+                    <HistoryView onPress={()=>navigate("InNav",{screen:"HistoryInfo",params:{item}})}>
                         {item.image == null 
                         ? <HistoryImage source={require("../assets/profile.png")}/>
                          :  <HistoryImage source={{uri:item.image.assets[0].uri}}/>
@@ -119,6 +121,7 @@ const History =({navigation:{navigate}, route})=>{
                         <HistoryText>{item.region}</HistoryText>
                         </HistoryInputView>
                     </HistoryView>
+                  
                 )}
                
                 rightOpenValue={-70} // 오른쪽으로 스와이프 했을 때, 열리는 넓비

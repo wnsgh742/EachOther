@@ -23,21 +23,28 @@ const HeaderChatView = styled.TouchableOpacity``;
 const HeaderChatText = styled.Text``;
 const HistoryInfo = ({navigation:{navigate,goBack}, route})=>{
     const UID = auth().currentUser.uid;
-  /*  const paramsData =[
-        route.params[0].id,
-        route.params[0].age,
-        route.params[0].nickname,
-        route.params[0].job,
-        route.params[0].region,
-        route.params[0].image,
-       ] */
+    const UUID = uuid.v4();
+
        const [infoData,setInfoData] = useState(route.params.item); 
+      
+        const [myNickName , setMyNickName] = useState();
+       const getProfile = ()=>{
+       
+        firestore().collection("Profile").where("id","==",UID)
+        .get()
+        .then((querySnapshot)=>{
+            querySnapshot.docs
+            .forEach((doc)=>setMyNickName(doc.data().nickname));
+           
+        })  
+        
+    }
     const HomeBack = ()=>{
         goBack();
     }
     useEffect(()=>{
-       console.log(infoData)
-     
+  
+       getProfile();
     },[])
     const ChatMove = ()=>{
        // navigate("Chat",{params:infoData});
@@ -49,6 +56,10 @@ const HistoryInfo = ({navigation:{navigate,goBack}, route})=>{
             myId:UID,
             targetId:infoData.id,
             targetName:infoData.nickname,
+            targetRegion:infoData.region,
+            targetAge : infoData.age,
+            uuid:UUID,
+            myName:myNickName,
         })
     }
  return(  

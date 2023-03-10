@@ -77,6 +77,7 @@ const InfoMoveText = styled.Text`
 const Wrapper = styled.View`
     align-items: center;
 `;
+
 const ProfileInfoView = styled.View`
      width: 310px;
     height: 187px;
@@ -84,9 +85,10 @@ const ProfileInfoView = styled.View`
     border-radius: 20px;
     border-color: ${(props)=>props.theme.textColor};
     border: 5px;
-    background-color: ${(props)=> props.theme.mainBgColor};
+    background-color: ${(props)=>props.theme.mainBgColor};
     margin-top: 20px;
 `;
+
 const ProfileInfoSection1 = styled.View`
     flex-direction: row;
     justify-content: space-between;
@@ -138,7 +140,7 @@ const Profile =({navigation:{navigate},route})=>{
                 c = snapshot.docs.map((doc)=>({
                     ...doc.data(),
                 })
-               
+            
                   );
                   
                if(c[0] !== undefined || c[1] !== undefined || c[2] !== undefined|| c[3] !== undefined){

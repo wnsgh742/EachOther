@@ -43,7 +43,7 @@ const MessageList = ({navigation:{navigate,goBack}, route})=>{
 
     const getMessageList = ()=>{
       let a = []
-      let b = []
+      
         firestore().collection("MessageList").where("myId","==",myId)
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs
@@ -95,11 +95,15 @@ const MessageList = ({navigation:{navigate,goBack}, route})=>{
       <MessageView>        
       <ChatList 
             data={messageList}
-            keyExtractor={item=>item.id}
+            keyExtractor={item=>item.uuid}
             renderItem={({item})=>(
               <RenderView onPress={()=>navigate("InNav",{screen:"Chatting",params:{item}})}>
-                
-                 <RenderText>{item.targetName}</RenderText>
+                {item.targetId == myId 
+                ?
+                  <RenderText>{item.myName}</RenderText>
+
+                :
+                 <RenderText>{item.targetName}</RenderText>}
                 
               </RenderView>
     )}

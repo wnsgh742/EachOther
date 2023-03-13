@@ -24,6 +24,7 @@
     "firebase-admin": "^11.5.0",
     "react": "18.2.0",
     "react-native": "0.71.0",
+    "react-native-animated-flatlist": "^0.0.3",
     "react-native-camera": "^4.2.1",
     "react-native-camera-kit": "^13.0.0",
     "react-native-gifted-chat": "^1.1.1",

@@ -25,14 +25,13 @@ const SaveTitle = styled.TouchableOpacity`
 `;
 const ProfileInfo = ({navigation:{navigate, goBack}})=>{
     const UID = auth().currentUser.uid;
-    const UID2 = UID + "a";
+   
     const [profileList, setProfileList] = useState(ProfileInfodata);
     const [hobby, setHobby] = useState([]);
     const [loveValue, setLoveValue] = useState([]);
     const [types, setTypes] = useState([]);
     const [religion, setReligion] = useState([]);
-    const [info, setInfo] = useState([]);
-    const [hobby2, setHobby2] = useState();
+   
     const HomeBack = ()=>{
       goBack();
        }

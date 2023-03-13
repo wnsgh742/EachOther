@@ -72,6 +72,20 @@ const ChatText = styled.Text`
     color: white;
     border-color: black;
 `;
+const MoveCardView = styled.TouchableOpacity`
+   background-color: ${(props)=> props.theme.btnColor};
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border-radius: 15px;
+    width: 250px;
+    height: 60px;
+`;
+const MoveCardText = styled.Text`
+   font-size: 30px;
+    color: white;
+    border-color: black;
+`;
 const Home =({navigation:{navigate}})=>{
     const {LogUser} = useContext(LogContext);
     const UIDHome = auth().currentUser.uid;
@@ -121,6 +135,9 @@ const Home =({navigation:{navigate}})=>{
     const MoveChat = ()=>{
       navigate("InNav",{screen:"Chatting", params:[profileData]})
     }
+    const MoveCard = ()=>{
+      navigate("InNav", {screen:"CardCheck"})
+    }
    
     return(
         <Container>
@@ -135,20 +152,9 @@ const Home =({navigation:{navigate}})=>{
           <Out onPress={SignOut} >
             <OutText>SignOut</OutText>
           </Out>
-          {chat ?
-        <FlatList 
-          data={chat}
-         
-          renderItem={(item)=>(
-            <ChatView onPress={MoveChat}>
-            <ChatText>{item.text}</ChatText>
-            </ChatView> 
-       )}
-        />
-    
-      :
-            null
-      }
+         <MoveCardView onPress={MoveCard}>
+          <MoveCardText>Card</MoveCardText>
+         </MoveCardView>
     
         </Container>
     )

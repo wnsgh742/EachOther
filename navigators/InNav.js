@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import CardCheck from "../screens/CardCheck";
 import Chat from "../screens/Chat";
 import Chatting from "../screens/Chatting";
 import EditProfile from "../screens/EditProfile";
@@ -20,6 +21,7 @@ const InNav = ()=>{
            <Nav.Screen name="HistoryInfo" component={HistoryInfo}/>
            <Nav.Screen name="Chat" component={Chat}/>
            <Nav.Screen name="Chatting" component={Chatting} />
+           <Nav.Screen name="CardCheck" component={CardCheck} />
         </Nav.Navigator>
     )
 }

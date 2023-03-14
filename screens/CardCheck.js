@@ -4,7 +4,8 @@ import styled from "styled-components";
 
 import ProfileInfodata from "../assets/ProfileInfodata/ProfileInfodata";
 import ProfileColor from "../assets/ProfileInfodata/CardColor";
-import { FaceDetector } from "react-native-camera";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 const Container = styled.View`
     flex: 1;
 `;
@@ -23,8 +24,10 @@ const ThirdFlatList = styled.FlatList`
    
     
 `;
+const CardContainer = styled.View``;
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const FourFlatList = styled.FlatList``;
-const CardView = styled.TouchableOpacity`
+const CardView = styled.View`
     width: 85px;
     height: 150px;
     border-radius: 20px;
@@ -33,12 +36,14 @@ const CardView = styled.TouchableOpacity`
    
     margin-left: 15px;
 `;
-const AnimatedBox = Animated.createAnimatedComponent(CardView);
-const TTT = styled.TouchableOpacity`
-    width: 85px;
-    height: 150px;
-    border-radius: 20px;
+const AnimatedView = Animated.createAnimatedComponent(CardView);
+
+const Box = styled.TouchableOpacity`
+      background-color: tomato;
+  width: 200px;
+  height: 200px;
 `;
+const AnimatedBox = Animated.createAnimatedComponent(Box);
 const CardText = styled.Text``;
 const CardEmoji = styled.Text`
     margin-bottom: 15px;
@@ -47,8 +52,10 @@ const CardEmoji = styled.Text`
 const CardCheck  = ({navigation:{navigate,goBack}, route})=>{
     const [cardData , setCardData] = useState(ProfileInfodata);
     const [cardColor , setCardColor] = useState(ProfileColor);
+    const [cardSelets, setCardSelets] = useState();
+    const UID = auth().currentUser.uid;
     const scale = useRef(new Animated.Value(1)).current;
-   
+    const X = new Animated.Value(0);
     const panResponder = useRef(PanResponder.create({
         onStartShouldSetPanResponder:()=>true,
         onPanResponderGrant:()=>onPressIn(),
@@ -62,45 +69,82 @@ const CardCheck  = ({navigation:{navigate,goBack}, route})=>{
     
 const GoBack = ()=>{
    goBack();
+  
 }
 const CardBackGround = ()=>{
-    const randomColor = Math.floor(Math.random() * 16777215)
+    const randomColor = Math.floor(Math.random(cardColor) * 16777215)
     .toString(16)
     .padStart(6, '0');
      return `#${randomColor}`;
 }
+const CardCollect = (item)=>{
+ 
+        firestore().collection("Card").doc(UID).collection("CardCollect").add({
+            id:UID,
+            name:item.name,
+            emoji:item.emoji,
+        })
+       
+        console.log("Sucess");
+
+       
+}
+const GetCard = async()=>{
+   
+  
+}
+const moveUp = () => {
+    Animated.spring(X, {
+        toValue:-200,
+        bounciness:15,
+        useNativeDriver:true,
+  
+      }).start();
+
+};
 useEffect(()=>{
-    console.log(cardData[0]);
+  //  GetCard();
 },[])
     return(
         <Container>
             <HeaderView onPress={GoBack}>
                 <HeaderText>뒤로가기</HeaderText>
+                <AnimatedBox 
+                    	onPress={moveUp} 
+                        styled={{
+                        transform: [{translateX : X}],
+                    }}
+                />
+
+            
             </HeaderView>
        
-            <Animated.FlatList 
+            <AnimatedFlatList 
                
                 horizontal={true}
                 data={cardData[0]}
                 keyExtractor={(item)=>item.id}
                 renderItem={({item})=>(
-                        
                    
-                   <AnimatedBox
-                     {...panResponder.panHandlers}
-                     style={{
-                         transform:[{scale}],
-                        backgroundColor:CardBackGround(),
-                     }}
-                     
+                  
+                   <AnimatedView
+                    {...panResponder.panHandlers}
+                    style={{
+                        transform:[{scale}],
+                       backgroundColor:CardBackGround(),
+                    }}
+                   //  onPress={()=>CardCollect(item)}
                    >
+                
                     <CardEmoji>{item.emoji}</CardEmoji>
                     <CardText>{item.name}</CardText>
+                  
+                   
                         
-                       
-                        </AnimatedBox>
-                      
+                    </AnimatedView> 
+                   
                 )}
+               
             />
             <SecondFlatList 
                
@@ -110,7 +154,7 @@ useEffect(()=>{
                renderItem={({item})=>(
                        
                   
-                  <AnimatedBox
+                  <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
                         transform:[{scale}],
@@ -122,7 +166,7 @@ useEffect(()=>{
                    <CardText>{item.name}</CardText>
                        
                       
-                       </AnimatedBox>
+                       </AnimatedView>
                      
                )}
            />
@@ -134,7 +178,7 @@ useEffect(()=>{
                renderItem={({item})=>(
                        
                   
-                  <AnimatedBox
+                  <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
                         transform:[{scale}],
@@ -146,7 +190,7 @@ useEffect(()=>{
                    <CardText>{item.name}</CardText>
                        
                       
-                       </AnimatedBox>
+                       </AnimatedView>
                      
                )}
            />
@@ -158,7 +202,7 @@ useEffect(()=>{
                renderItem={({item})=>(
                        
                   
-                  <AnimatedBox
+                  <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
                         transform:[{scale}],
@@ -170,7 +214,7 @@ useEffect(()=>{
                    <CardText>{item.name}</CardText>
                        
                       
-                       </AnimatedBox>
+                       </AnimatedView>
                      
                )}
            />

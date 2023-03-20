@@ -8,6 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 const Container = styled.View`
     flex: 1;
+    background-color: ${(props)=> props.theme.btnColor};
 `;
 const Title = styled.Text`
     margin-top: 30px;
@@ -26,8 +27,10 @@ const ThirdFlatList = styled.FlatList`
 `;
 const CardContainer = styled.View``;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const FourFlatList = styled.FlatList``;
-const CardView = styled.View`
+const CardView = styled.TouchableOpacity`
     width: 85px;
     height: 150px;
     border-radius: 20px;
@@ -38,23 +41,26 @@ const CardView = styled.View`
 `;
 const AnimatedView = Animated.createAnimatedComponent(CardView);
 
-const Box = styled.TouchableOpacity`
+const Box = styled.View`
       background-color: tomato;
   width: 200px;
   height: 200px;
 `;
-const AnimatedBox = Animated.createAnimatedComponent(Box);
+const AnimatedBox = Animated.createAnimatedComponent(TouchableOpacity);
+
 const CardText = styled.Text``;
 const CardEmoji = styled.Text`
     margin-bottom: 15px;
     margin-left: 30px;
 `;
+
 const CardCheck  = ({navigation:{navigate,goBack}, route})=>{
     const [cardData , setCardData] = useState(ProfileInfodata);
     const [cardColor , setCardColor] = useState(ProfileColor);
     const [cardSelets, setCardSelets] = useState();
     const UID = auth().currentUser.uid;
     const scale = useRef(new Animated.Value(1)).current;
+    const slide = useRef(new Animated.Value(0)).current;
     const X = new Animated.Value(0);
     const panResponder = useRef(PanResponder.create({
         onStartShouldSetPanResponder:()=>true,
@@ -62,11 +68,12 @@ const CardCheck  = ({navigation:{navigate,goBack}, route})=>{
         onPanResponderRelease:()=>onPressOut(),
         
     })).current;
+   
 
     const onPressIn=()=>{Animated.spring(scale,{toValue:0.95, useNativeDriver:true}).start();}
     
     const onPressOut=()=>{Animated.spring(scale,{toValue:1, useNativeDriver:true}).start();}
-    
+   
 const GoBack = ()=>{
    goBack();
   
@@ -85,40 +92,105 @@ const CardCollect = (item)=>{
             emoji:item.emoji,
         })
        
-        console.log("Sucess");
-
-       
+        console.log("Sucess");       
 }
+
 const GetCard = async()=>{
    
   
 }
+
 const moveUp = () => {
     Animated.spring(X, {
-        toValue:-200,
+        toValue:200,
         bounciness:15,
         useNativeDriver:true,
   
       }).start();
 
 };
+
+  const duration1 = 8000;
+  const duration2 = 8000;
+  const duration3 = 8000;
+  const duration4 = 8000;
+ const animated1 = new Animated.Value(250);
+ const animated2 = new Animated.Value(300);
+ const animated3 = new Animated.Value(200);
+ const animated4 = new Animated.Value(250);
+ const AnimateTotal = ()=>{
+    Animated.loop(
+        Animated.sequence([
+          
+          Animated.timing(animated1, {
+            toValue: -520,
+            duration: duration1,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animated1, {
+            toValue: 450,
+            duration: duration1,
+            useNativeDriver: true,
+          }),
+          
+          
+        ]),
+      
+      ).start();
+      Animated.loop(
+        Animated.sequence([
+            Animated.timing(animated2, {
+                toValue: -520,
+                duration: duration2,
+                useNativeDriver: true,
+              }),
+              Animated.timing(animated2, {
+                toValue: 450,
+                duration: duration2,
+                useNativeDriver: true,
+              }),
+           ]),
+      ).start();
+      Animated.loop(
+        Animated.sequence([
+            Animated.timing(animated3, {
+                toValue: -520,
+                duration: duration3,
+                useNativeDriver: true,
+              }),
+              Animated.timing(animated3, {
+                toValue: 450,
+                duration: duration3,
+                useNativeDriver: true,
+              }),
+           ]),
+      ).start();
+      Animated.loop(
+        Animated.sequence([
+            Animated.timing(animated4, {
+                toValue: -520,
+                duration: duration4,
+                useNativeDriver: true,
+              }),
+              Animated.timing(animated4, {
+                toValue: 450,
+                duration: duration4,
+                useNativeDriver: true,
+              }),
+           ]),
+      ).start();
+ }
 useEffect(()=>{
   //  GetCard();
+ AnimateTotal();
 },[])
+
     return(
         <Container>
             <HeaderView onPress={GoBack}>
                 <HeaderText>뒤로가기</HeaderText>
-                <AnimatedBox 
-                    	onPress={moveUp} 
-                        styled={{
-                        transform: [{translateX : X}],
-                    }}
-                />
-
-            
             </HeaderView>
-       
+      
             <AnimatedFlatList 
                
                 horizontal={true}
@@ -126,11 +198,14 @@ useEffect(()=>{
                 keyExtractor={(item)=>item.id}
                 renderItem={({item})=>(
                    
-                  
+                  <AnimatedBox 
+                    
+                  >
                    <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
-                        transform:[{scale}],
+                     
+                        transform:[{translateX:animated1},{scale:scale}],
                        backgroundColor:CardBackGround(),
                     }}
                    //  onPress={()=>CardCollect(item)}
@@ -142,13 +217,13 @@ useEffect(()=>{
                    
                         
                     </AnimatedView> 
-                   
+                    </AnimatedBox>
                 )}
                
             />
-            <SecondFlatList 
+              <SecondFlatList  
                
-               horizontal={true}
+               horizontal={true} 
                data={cardData[1]}
                keyExtractor={(item)=>item.id}
                renderItem={({item})=>(
@@ -157,7 +232,7 @@ useEffect(()=>{
                   <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
-                        transform:[{scale}],
+                        transform:[{scale:scale},{translateX:animated2}],
                        backgroundColor:CardBackGround(),
                     }}
                     
@@ -181,7 +256,7 @@ useEffect(()=>{
                   <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
-                        transform:[{scale}],
+                        transform:[{scale:scale},{translateX:animated3}],
                        backgroundColor:CardBackGround(),
                     }}
                     
@@ -205,7 +280,7 @@ useEffect(()=>{
                   <AnimatedView
                     {...panResponder.panHandlers}
                     style={{
-                        transform:[{scale}],
+                        transform:[{scale:scale},{translateX:animated4}],
                        backgroundColor:CardBackGround(),
                     }}
                     

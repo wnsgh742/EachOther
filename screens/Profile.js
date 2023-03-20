@@ -106,6 +106,23 @@ const ProfileInfoText= styled.Text`
     font-size: 16px;
     font-weight: 500;
 `;
+const CardView = styled.View`
+   margin-left: 25px;
+`;
+const CardBox = styled.View`
+    width: 85px;
+    height: 150px;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    background-color: beige;
+`;
+const CardText = styled.Text``;
+const CardEmoji = styled.Text`
+    margin-bottom: 15px;
+    margin-left: 30px;
+`;
 
 const Profile =({navigation:{navigate},route})=>{
     const UID = auth().currentUser.uid;
@@ -116,7 +133,7 @@ const Profile =({navigation:{navigate},route})=>{
     const [profileData, setProfileData] = useState();
     const [profileList, setProfileList] = useState(ProfileInfodata);
     const [editToggle, setEditToggle] = useState(true);
-
+    const [card, setCard] = useState();
     const [infoHobby , setInfoHobby] = useState([]);
     const [infoLoveValue , setInfoLoveValue] = useState([]);
     const [infoTypes , setInfoTypes] = useState([]);
@@ -210,14 +227,23 @@ const Profile =({navigation:{navigate},route})=>{
         setResponse(null); */
         getProfile();
     }
+    const getCard = ()=>{
+        let c = []
+        firestore().collection("Card").doc(UID).collection("CardCollect")
+        .onSnapshot((snapshot)=>{
+            snapshot.docs.forEach((doc)=>{
+               c.push(doc.data());
+            })
+            setCard(c);
+        })
+    }
 
     useEffect(()=>{
         getProfile();
-        
-            getProfileInfo();
-        
-     console.log(profileData);
-      // test();
+        getProfileInfo();
+        getCard();
+     console.log(card);
+    
     },[])
 
     const [response, setResponse] = useState(null);
@@ -244,6 +270,7 @@ const Profile =({navigation:{navigate},route})=>{
       const Info = ()=>{
         navigate("InNav",{screen:"ProfileInfo"});
       }
+
     return(
         <Container>
             <TitleView>
@@ -321,9 +348,32 @@ const Profile =({navigation:{navigate},route})=>{
             </Main>
             }
             <InfoMove onPress={Info}>
-                <InfoMoveText>상세설정</InfoMoveText>
+                <InfoMoveText>Check List</InfoMoveText>
             </InfoMove>
-        <Wrapper>
+
+            
+            <FlatList 
+                data={card}
+                horizontal={false}
+                numColumns={3}
+                renderItem={({item})=>(
+                   <CardView>
+                    <CardBox>
+                        <CardText>{item.name}</CardText>
+                        <CardEmoji>{item.emoji}</CardEmoji>
+                    </CardBox>
+                    </CardView>
+                )}
+            />
+                
+                
+
+                
+        </Container>
+    )
+}
+export default Profile;
+{/*   <Wrapper>
           <ProfileInfoView>
          
            <ProfileInfoSection1>
@@ -348,7 +398,4 @@ const Profile =({navigation:{navigate},route})=>{
 
           </ProfileInfoView>
           </Wrapper>
-        </Container>
-    )
-}
-export default Profile;
+          */}

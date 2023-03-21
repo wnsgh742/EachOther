@@ -64,6 +64,7 @@ const SwipeHiddenItemText = styled.Text`
     font-size: 14px;
 `;
 const History =({navigation:{navigate}, route})=>{
+  //  const QRdata = route.params.item;
     const UID = auth().currentUser.uid;
     const userObj = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
@@ -84,7 +85,7 @@ const History =({navigation:{navigate}, route})=>{
 
     useEffect(()=>{
         getProfile();
-     
+    // console.log(QRdata);
     },[])
     const HomeBack = ()=>{
         navigate("Home");

@@ -47,7 +47,7 @@ const QRgenerator =({navigation:{navigate}, route})=>{
 
             <QRView>
             <QRCode 
-               value={profile}
+               value={profile[0]}
                
             />
             </QRView>

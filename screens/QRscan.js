@@ -6,6 +6,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { Alert, Linking, Vibration } from "react-native";
 import { Camera, CameraType, CameraScreen } from "react-native-camera-kit";
+
 const Container = styled.View`
     flex: 1;
 `;
@@ -14,17 +15,20 @@ const Title = styled.Text`
 `;
 const HeaderView = styled.TouchableOpacity`
     flex-direction: row;
-   
     margin-top: 50px;
 `;
 const CameraView = styled.View`
     flex:1;
 `;
+
 const ScannerView = styled.TouchableOpacity``;
+
 const ScannerText = styled.Text``;
+
 const QRscan =({navigation:{navigate, goBack}})=>{
     const [scaned, setScaned] = useState(true);
     const [scanData, setScanData] = useState();
+    const [data, setData] = useState();
     const ref = useRef(null);
     const HomeBack = ()=>{
         navigate("Home");
@@ -34,32 +38,23 @@ const QRscan =({navigation:{navigate, goBack}})=>{
                 console.error(err)
                 )
        }
-       const onBarCodeRead = (e) => {
-        if (!scaned) {
-            setScanData({
-                result:e,
-            })
-          //  navigate("InNav", {screen:"History"});
-           console.log(e.data);
-            return;
-        }
-       
-        setScaned(false);
-        Vibration.vibrate();
-        Alert.alert("QR Code", event.nativeEvent.codeStringValue, [
-          { text: "OK", onPress: () => 
-          setScaned(true)
-          
-        },
-        ]);
-       
-      };
+      
       const onBottomButtonPressed = ()=>{
         goBack();
       }
+
        useEffect(()=>{
         setScaned(true);
+       // console.log(scanData);
        },[])
+       const onBarCodeRead = (event) => {
+        if (!scaned) return;
+        setScaned(false);
+        Vibration.vibrate();
+        Alert.alert("QR Code", event.nativeEvent.codeStringValue,  [
+          { text: "OK", onPress: () => setScaned(true) },
+        ]);
+      };
     return(
         <Container>
             <HeaderView onPress={HomeBack}>

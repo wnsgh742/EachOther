@@ -59,7 +59,7 @@ target 'Test40' do
       case target.name
       when 'RCT-Folly'
         target.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
         end
     end
   end

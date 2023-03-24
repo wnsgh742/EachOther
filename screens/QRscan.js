@@ -6,6 +6,8 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { Alert, Linking, Vibration } from "react-native";
 import { Camera, CameraType, CameraScreen } from "react-native-camera-kit";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const Container = styled.View`
     flex: 1;
@@ -26,6 +28,7 @@ const ScannerView = styled.TouchableOpacity``;
 const ScannerText = styled.Text``;
 
 const QRscan =({navigation:{navigate, goBack}})=>{
+    const UID = auth().currentUser.uid;
     const [scaned, setScaned] = useState(true);
     const [scanData, setScanData] = useState();
     const [data, setData] = useState();
@@ -38,7 +41,33 @@ const QRscan =({navigation:{navigate, goBack}})=>{
                 console.error(err)
                 )
        }
-      
+       const onBarCodeRead = (event) => {
+        if (!scaned) {
+            setScanData({
+                event,
+            });
+           
+           
+
+          navigate("History",{params:event.nativeEvent.codeStringValue})
+        
+         
+            return;
+        }
+       
+       setScaned(false);
+        Vibration.vibrate();
+        Alert.alert("QR Scan", event.nativeEvent.codeStringValue, [
+          { text: "OK", onPress: () => 
+           
+          setScaned(true),
+          
+        },
+        
+        ]);
+       
+      };
+
       const onBottomButtonPressed = ()=>{
         goBack();
       }
@@ -47,14 +76,14 @@ const QRscan =({navigation:{navigate, goBack}})=>{
         setScaned(true);
        // console.log(scanData);
        },[])
-       const onBarCodeRead = (event) => {
+    /*   const onBarCodeRead = (event) => {
         if (!scaned) return;
         setScaned(false);
         Vibration.vibrate();
         Alert.alert("QR Code", event.nativeEvent.codeStringValue,  [
           { text: "OK", onPress: () => setScaned(true) },
         ]);
-      };
+      };*/
     return(
         <Container>
             <HeaderView onPress={HomeBack}>

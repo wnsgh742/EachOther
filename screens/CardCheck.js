@@ -75,7 +75,7 @@ const CardCheck  = ({navigation:{navigate,goBack}, route})=>{
     const onPressOut=()=>{Animated.spring(scale,{toValue:1, useNativeDriver:true}).start();}
    
 const GoBack = ()=>{
-   goBack();
+   navigate("BottomTabs",{screen:"Home",params:cardColor});
   
 }
 const CardBackGround = ()=>{

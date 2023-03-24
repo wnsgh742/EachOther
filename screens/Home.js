@@ -86,7 +86,8 @@ const MoveCardText = styled.Text`
     color: white;
     border-color: black;
 `;
-const Home =({navigation:{navigate}})=>{
+const Home =({navigation:{navigate},route})=>{
+    const pa = route.params;
     const {LogUser} = useContext(LogContext);
     const UIDHome = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
@@ -120,7 +121,7 @@ const Home =({navigation:{navigate}})=>{
     useEffect(()=>{
         getProfile();
         getChat();
-     console.log(chat);
+     console.log(pa);
     },[])
     
     const QRgenerate = ()=>{
@@ -153,7 +154,7 @@ const Home =({navigation:{navigate}})=>{
             <OutText>SignOut</OutText>
           </Out>
          <MoveCardView onPress={MoveCard}>
-          <MoveCardText>Card</MoveCardText>
+          <MoveCardText>Cards</MoveCardText>
          </MoveCardView>
     
         </Container>

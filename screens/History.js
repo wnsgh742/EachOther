@@ -64,14 +64,15 @@ const SwipeHiddenItemText = styled.Text`
     font-size: 14px;
 `;
 const History =({navigation:{navigate}, route})=>{
-  //  const QRdata = route.params.item;
+    const [qrData, setQrData] = useState(route.params);
+   const [qrid, setQrId] = useState();
     const UID = auth().currentUser.uid;
-    const userObj = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
 
     const getProfile = ()=>{
+       
        let b = []
-        firestore().collection("Profile")//.where("id","==",userObj)
+        firestore().collection("Profile")//.where("id","==",QRdata)
         .onSnapshot((snapshot)=>{
             snapshot.docs.forEach((doc)=>{
                 b.push({
@@ -82,10 +83,61 @@ const History =({navigation:{navigate}, route})=>{
             })
         }) 
     }
-
+    const getQR = ()=>{
+        
+        console.log(qrid);
+        let b =[]
+        firestore().collection("Profile").where("id","in",qrid)
+            .onSnapshot((snapshot)=>{
+                snapshot.docs.forEach((doc)=>{
+                    b.push({
+                        ...doc.data(),
+                    })
+                    setProfileData(b);
+                   
+                })
+                console.log(profileData);
+            }) 
+           
+        
+    }
+    const getQRId = () =>{
+        let c = []
+            firestore().collection("Profile").doc(UID).collection("QR")
+            .onSnapshot((snapshot)=>{
+                snapshot.docs.forEach((doc)=>{
+                    
+                  c.push({
+                    ...doc.data(),
+                  })  
+                  
+                })
+                let data3 = []
+                for(let i = 0; i < c.length; i++) {
+                  data3.push(c[i].qrID);
+                 
+               };
+               console.log(data3);
+              setQrId(data3);
+            
+            })
+            getQR();
+    }
     useEffect(()=>{
-        getProfile();
-    // console.log(QRdata);
+        
+        if(qrData){
+            
+            firestore().collection("Profile").doc(UID).collection("QR").add({
+                qrID:qrData.params,
+            })
+          getQRId();
+        }else{
+            getQRId();
+            
+        }
+       
+       
+       
     },[])
     const HomeBack = ()=>{
         navigate("Home");

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleSigninConfigure } from "../key";
+import { AppleButton,appleAuth } from '@invertase/react-native-apple-authentication';
 import {
     KakaoOAuthToken,
     KakaoProfile,
@@ -51,12 +52,16 @@ const Password = styled.TextInput`
 `;
 const Btn = styled.TouchableOpacity``;
 const BtnText = styled.Text``;
-
+const AppleLogin = styled.View`
+    align-items: center;
+    justify-content: center;
+`;
 
 const Login =()=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [result,setResult]= useState("");
+
 useEffect(()=>{
     googleSigninConfigure();
 },[])
@@ -75,12 +80,32 @@ const Google = async()=>{
 const Kakao = async()=>{
     try {
         const token = await login();
-        setResult(JSON.stringify(token));
+      const {kakaoToken} = JSON.stringify(token);
         
     } catch (err) {
         console.log(err);
     }
    
+}
+const Apple = async()=>{
+    try {
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+          });
+          if (!appleAuthRequestResponse.identityToken) {
+            throw new Error('Apple Sign-In failed - no identify token returned');
+          }
+        
+          // Create a Firebase credential from the response
+          const { identityToken, nonce } = appleAuthRequestResponse;
+          const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+        
+          // Sign the user in with the credential
+          return auth().signInWithCredential(appleCredential);
+    } catch (e) {
+        console.log(e);
+    }
 }
 const Test = ()=>{
     try {
@@ -113,6 +138,19 @@ const Login = ()=>{
            <KakaoLogin onPress={Kakao}>
                 <KakaoImage source={require('../assets/kakaoBtn.png')}/>
            </KakaoLogin>
+           <AppleLogin>          
+                <AppleButton 
+                buttonStyle={AppleButton.Style.BLACK}
+                buttonType={AppleButton.Type.SIGN_IN}
+                style={{
+                    width: 160,
+                    height: 45,
+                    
+                }}
+                onPress={Apple}
+            />
+           </AppleLogin>
+
            <Email 
             value={email}
             onChangeText={(text)=>setEmail(text)}

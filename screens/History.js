@@ -68,6 +68,7 @@ const History =({navigation:{navigate}, route})=>{
    const [qrid, setQrId] = useState();
     const UID = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
+    const [test2, setTest2] = useState();
 
     const getProfile = ()=>{
        
@@ -84,8 +85,7 @@ const History =({navigation:{navigate}, route})=>{
         }) 
     }
     const getQR = ()=>{
-        
-        console.log(qrid);
+       if(!qrid==[]){
         let b =[]
         firestore().collection("Profile").where("id","in",qrid)
             .onSnapshot((snapshot)=>{
@@ -98,6 +98,12 @@ const History =({navigation:{navigate}, route})=>{
                 })
                 console.log(profileData);
             }) 
+       }else{
+        return;
+       }
+            
+        
+       
            
         
     }
@@ -117,11 +123,23 @@ const History =({navigation:{navigate}, route})=>{
                   data3.push(c[i].qrID);
                  
                };
-               console.log(data3);
+              // console.log(data3);
               setQrId(data3);
             
             })
-            getQR();
+            if(qrid){
+                getQR();
+             
+            }else{
+                test();
+
+            }
+           
+    }
+    const test = ()=>{
+      
+        console.log("suc");
+
     }
     useEffect(()=>{
         
@@ -132,11 +150,12 @@ const History =({navigation:{navigate}, route})=>{
             })
           getQRId();
         }else{
+         //  test();
             getQRId();
             
         }
        
-       
+        getQRId();
        
     },[])
     const HomeBack = ()=>{

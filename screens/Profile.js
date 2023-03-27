@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Alert, FlatList, Platform } from "react-native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ProfileInfodata from "../assets/ProfileInfodata/ProfileInfodata";
-
+import uuid from "react-native-uuid";
 
 const Container = styled.View`
     flex:1;
@@ -126,6 +126,7 @@ const CardEmoji = styled.Text`
 
 const Profile =({navigation:{navigate},route})=>{
     const UID = auth().currentUser.uid;
+    
     const [nickName, setNickName] = useState("");
     const [age, setAge] = useState("");
     const [job, setJob] = useState("");
@@ -138,7 +139,7 @@ const Profile =({navigation:{navigate},route})=>{
     const [infoLoveValue , setInfoLoveValue] = useState([]);
     const [infoTypes , setInfoTypes] = useState([]);
     const [infoReligion , setInfoReligion] = useState([]);
-    
+    const [randomCode , setRandomCode] = useState(uuid.v4().slice(30));
         const getProfile = ()=>{
            let b = []
             firestore().collection("Profile").where("id","==",UID)
@@ -210,6 +211,7 @@ const Profile =({navigation:{navigate},route})=>{
             job: job,
            region: region,
            image:response,
+           randomCode:randomCode,
            date:Date.now(),
         })
         setEditToggle(true);
@@ -270,6 +272,9 @@ const Profile =({navigation:{navigate},route})=>{
       const Info = ()=>{
         navigate("InNav",{screen:"ProfileInfo"});
       }
+      const Setting = ()=>{
+        navigate("InNav",{screen:"Set"});
+      }
 
     return(
         <Container>
@@ -279,7 +284,7 @@ const Profile =({navigation:{navigate},route})=>{
             </AddTitle>
             <Title>Profile</Title>
            
-            <AddTitle>
+            <AddTitle onPress={Setting}>
                 <Ionicons name="add" color="black" size={55}/>
             </AddTitle>
             </TitleView>

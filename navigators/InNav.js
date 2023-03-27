@@ -8,6 +8,7 @@ import HistoryInfo from "../screens/HistoryInfo";
 import ProfileInfo from "../screens/ProfileInfo";
 import QRgenerator from "../screens/QRgenerator";
 import QRscan from "../screens/QRscan";
+import Set from "../screens/Set";
 
 const Nav = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const InNav = ()=>{
            <Nav.Screen name="Chat" component={Chat}/>
            <Nav.Screen name="Chatting" component={Chatting} />
            <Nav.Screen name="CardCheck" component={CardCheck} />
+           <Nav.Screen name="Set" component={Set} />
         </Nav.Navigator>
     )
 }

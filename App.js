@@ -18,7 +18,6 @@ export default function App() {
   const isDark = useColorScheme() === "dark";
   const [userObj, setUserObj] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
-
   useEffect(()=>{
     
     auth().onAuthStateChanged((user)=>{

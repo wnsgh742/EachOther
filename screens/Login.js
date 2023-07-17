@@ -12,58 +12,103 @@ import {
     logout,
     unlink,
   } from '@react-native-seoul/kakao-login';
+import { PEACH_COLOR } from "../styled/Colors";
+import {
+    responsiveHeight,
+    responsiveWidth,
+    responsiveFontSize
+  } from "react-native-responsive-dimensions";
   
 const Container = styled.View`
-
+    flex: 1;
+  
+`;
+const LoginView = styled.View`
+    align-items: center;
+    margin-top: 20px;
+    
+`;
+const ConfrimView= styled.View`
+    flex-direction: row;
+    padding: 10px;
+    justify-content: center;
+    width: 250px;
+    align-items: center;
+`;
+const SocialView = styled.View`
+    align-items: center;
+    padding: 3px;
+    
+    
 `;
 const Title = styled.Text``;
 const GoogleLogin = styled.TouchableOpacity`
-    margin-top: 30px;
-    
+    margin-top: 20px;
+   
 `;
 const GoogleLoginText = styled.Text``;
 const GoogleImage = styled.Image`
-    width: 192px;
-    height: 48px;
+   height: 35px;
+   width: 300px;
 `;
 const KakaoLogin = styled.TouchableOpacity`
-    margin-top: 30px;
-    
+   
+   
 `;
 const KakaoLoginText = styled.Text``;
 const KakaoImage = styled.Image`
+   height: 35px;
+   width: 293px;
+   margin-top: 10px;
    
 `;
 const Email= styled.TextInput`
     width: 200px;
     height: 50px;
     align-items: center;
-    color: black;
-    border-color: black;
-    border: 5px;
+   border: 2px;
+  border-radius: 18px;
+  border-color: ${PEACH_COLOR};
+  
 `;
 const Password = styled.TextInput`
      width: 200px;
     height: 50px;
     align-items: center;
-    color: black;
-    border-color: black;
-    border: 5px;
+    border: 2px;
+    margin-top: 5px;
+    border-radius: 18px;
+    border-color: ${PEACH_COLOR};
+   
 `;
-const Btn = styled.TouchableOpacity``;
+const Btn = styled.TouchableOpacity`
+    
+`;
 const BtnText = styled.Text``;
 const AppleLogin = styled.View`
     align-items: center;
     justify-content: center;
+    margin-top: 10px;
 `;
-
+const TitleImageView = styled.View`
+    align-items: center;
+    margin-top: 100px;
+`;
+const TitleImage = styled.Image`
+   width: 200px;
+   height:200px;
+   border-radius: 40px;
+`;
 const Login =()=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [result,setResult]= useState("");
+ //   const auth = getAuth()
 
 useEffect(()=>{
     googleSigninConfigure();
+    
+  
 },[])
 
 
@@ -77,6 +122,7 @@ const Google = async()=>{
     console.log(err);
  }  
 }
+
 const Kakao = async()=>{
     try {
         const token = await login();
@@ -107,6 +153,7 @@ const Apple = async()=>{
         console.log(e);
     }
 }
+
 const Test = ()=>{
     try {
         console.log(email);
@@ -126,10 +173,38 @@ const Login = ()=>{
 
     return(
         <Container>
-            <Title>Login</Title>
+            <TitleImageView>
+            <TitleImage 
+                source={require('../assets/mlbw_logo.png')}
+            />
+            </TitleImageView>
+            <LoginView>
+            <Email 
+            value={email}
+            onChangeText={(text)=>setEmail(text)}
+            placeholder="Email"
+            textAlign="left"
+           />
+           <Password 
+            value={password}
+            onChangeText={(text)=>setPassword(text)}
+            placeholder="Password"
+            secureTextEntry={true}  
+
+           />
+           <ConfrimView>
+           <Btn onPress={Login}>
+            <BtnText>로그인</BtnText>
+           </Btn>
+           <Btn onPress={Test}>
+            <BtnText>가입하기</BtnText>
+           </Btn>
+           </ConfrimView>
+
+           </LoginView>
+           <SocialView>
             <GoogleLogin
              onPress={Google}
-             
              >
                <GoogleImage 
                 source={require('../assets/googleBtn.png')}   
@@ -138,33 +213,20 @@ const Login = ()=>{
            <KakaoLogin onPress={Kakao}>
                 <KakaoImage source={require('../assets/kakaoBtn.png')}/>
            </KakaoLogin>
-           <AppleLogin>          
+            <AppleLogin>          
                 <AppleButton 
                 buttonStyle={AppleButton.Style.BLACK}
                 buttonType={AppleButton.Type.SIGN_IN}
                 style={{
-                    width: 160,
-                    height: 45,
+                    width: 293,
+                    height: 35,
                     
                 }}
-                onPress={Apple}
+                onPress={()=>Apple()}
             />
            </AppleLogin>
-
-           <Email 
-            value={email}
-            onChangeText={(text)=>setEmail(text)}
-           />
-           <Password 
-            value={password}
-            onChangeText={(text)=>setPassword(text)}
-           />
-           <Btn onPress={Test}>
-            <BtnText>확인</BtnText>
-           </Btn>
-           <Btn onPress={Login}>
-            <BtnText>로그인</BtnText>
-           </Btn>
+        
+          </SocialView>
         </Container>
     )
 }

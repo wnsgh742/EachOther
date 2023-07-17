@@ -13,15 +13,18 @@ const Container = styled.View`
 `;
 const TitleView = styled.View`
     align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 60px;
+    
+    margin-top: 20px;
 `;
 const Title = styled.Text`
     font-size: 43px;
 `;
 const AddTitle = styled.TouchableOpacity`
-    margin-right: 10px;
+    
+    align-items: flex-end;
+    margin-top: 30px;
+    padding-right: 10px;
+    padding-top: 10px;
 `;
 const Main = styled.View`
     align-items: center;
@@ -278,15 +281,12 @@ const Profile =({navigation:{navigate},route})=>{
 
     return(
         <Container>
-            <TitleView>
-            <AddTitle>
-                <Ionicons name="add" color="white" size={65}/>
-            </AddTitle>
-            <Title>Profile</Title>
-           
             <AddTitle onPress={Setting}>
-                <Ionicons name="add" color="black" size={55}/>
+                <Ionicons name="settings-outline" color="black" size={25}/>
             </AddTitle>
+
+            <TitleView>
+            <Title>Profile</Title> 
             </TitleView>
             {profileData && editToggle ? 
              <Main>
@@ -297,7 +297,9 @@ const Profile =({navigation:{navigate},route})=>{
                  :
                  <MainProfileImage source={{uri:profileData.image.assets[0]?.uri}}/> 
                  }
-                 
+                  <ImageButtonText>
+            <Ionicons name="add" color="white" size={22}/>
+            </ImageButtonText>
             
           </ImageButton>
                  <MainProfileTextInputView>
@@ -319,7 +321,7 @@ const Profile =({navigation:{navigate},route})=>{
                
                  
             <ImageButtonText>
-            <Ionicons name="add" color="black" size={22}/>
+            <Ionicons name="add" color="white" size={22}/>
             </ImageButtonText>
           </ImageButton>
                 <MainProfileImage source={{uri:response?.assets[0]?.uri}}/>

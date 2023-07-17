@@ -3,6 +3,7 @@ import styled from "styled-components";
 import uuid from "react-native-uuid";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { Linking } from "react-native";
 const Container = styled.View`
     flex: 1;
     align-items: center;
@@ -35,13 +36,36 @@ const InviteCodeTextInput= styled.TextInput`
     border-radius: 20px;
 `;
 const InviteCodeText = styled.Text`
-    margin-top: 30px;
+    margin-top: 10px;
 
 `;
 const Back = styled.TouchableOpacity``;
 const BackText = styled.Text``;
-const Connect = styled.TouchableOpacity``;
+const Connect = styled.TouchableOpacity`
+    align-items: center;
+    margin-top: 10px;
+`;
 const ConnectText = styled.Text``;
+const SuggestionView = styled.TouchableOpacity`
+     border: 2px;
+    width: 180px;
+    height: 50px;
+    border-radius: 20px;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+`;
+const SuggestionText = styled.Text``;
+const SignOutView = styled.TouchableOpacity`
+     border: 2px;
+    width: 180px;
+    height: 50px;
+    border-radius: 20px;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+`;
+const SignOutText = styled.Text``;
 const Set = ({navigation:{navigate,goBack}, route})=>{
     const UID = auth().currentUser.uid;
     const [randomCode , setRandomCode] = useState();
@@ -78,9 +102,14 @@ const Set = ({navigation:{navigate,goBack}, route})=>{
         
     useEffect(()=>{
        GetCode();
-       console.log(inViteId);
+      
     },[])
-
+const Suggestion = ()=>{
+    Linking.openURL("https://walla.my/%EC%8B%A0%EA%B3%A0%EC%A0%91%EC%88%98")
+}
+const SignOut = ()=>{
+    auth().signOut();
+}
     return( 
         <Container>
             <Title>Setting</Title>
@@ -101,6 +130,12 @@ const Set = ({navigation:{navigate,goBack}, route})=>{
                 </Connect>
                 
             </InviteCode>
+            <SuggestionView onPress={()=>Suggestion()}>
+                <SuggestionText>신고하기</SuggestionText>
+            </SuggestionView>
+            <SignOutView onPress={()=>SignOut()}>
+                <SignOutText>로그아웃</SignOutText>
+            </SignOutView>
         </Container>
     )
 }

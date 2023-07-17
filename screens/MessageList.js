@@ -16,18 +16,23 @@ const Title = styled.Text`
     margin-top: 10px;
     font-size: 43px;
 `;
-const MessageView = styled.View``;
+const MessageView = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
 const MessageText = styled.Text``;
-const ChatList = styled.FlatList``
+const ChatList = styled.FlatList`
+ 
+`
 const RenderView = styled.TouchableOpacity`
   margin-top: 20px;
     flex-direction: row;
-   margin-left: 5px;
+  // margin-left: 5px;
     align-items: center;
     border-radius: 20px;
-    width: 380px;
-    height: 137px;
-    justify-content: flex-start;
+    width: 250px;
+    height: 80px;
+   justify-content: center;
     background-color: ${(props)=> props.theme.btnColor};
 `;
 const RenderText = styled.Text`
@@ -101,9 +106,10 @@ const MessageList = ({navigation:{navigate,goBack}, route})=>{
                 {item.targetId == myId 
                 ?
                   <RenderText>{item.myName}</RenderText>
-
+               
                 :
-                 <RenderText>{item.targetName}</RenderText>}
+                 <RenderText>{item.targetName}</RenderText>
+                 }
                 
               </RenderView>
     )}

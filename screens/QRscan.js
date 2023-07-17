@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GREY_COLOR } from "../styled/Colors";
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
 import { Alert, Linking, Vibration } from "react-native";
 import { Camera, CameraType, CameraScreen } from "react-native-camera-kit";
 import firestore from '@react-native-firebase/firestore';
@@ -42,13 +39,16 @@ const QRscan =({navigation:{navigate, goBack}})=>{
                 )
        }
        const onBarCodeRead = (event) => {
+        console.log(event);
         if (!scaned) {
             setScanData({
                 event,
             });
            
-           
-
+            firestore().collection("Profile").doc(UID).collection("QR").doc(event.nativeEvent.codeStringValue).set({
+                qrID:event.nativeEvent.codeStringValue,
+            })
+            
           navigate("History",{params:event.nativeEvent.codeStringValue})
         
          
@@ -74,16 +74,9 @@ const QRscan =({navigation:{navigate, goBack}})=>{
 
        useEffect(()=>{
         setScaned(true);
-       // console.log(scanData);
+      
        },[])
-    /*   const onBarCodeRead = (event) => {
-        if (!scaned) return;
-        setScaned(false);
-        Vibration.vibrate();
-        Alert.alert("QR Code", event.nativeEvent.codeStringValue,  [
-          { text: "OK", onPress: () => setScaned(true) },
-        ]);
-      };*/
+    
     return(
         <Container>
             <HeaderView onPress={HomeBack}>

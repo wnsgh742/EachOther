@@ -1,8 +1,14 @@
 module.exports = {
-  root: true,
-  extends: '@react-native-community',
-  rules: {
-    'linebreak-style': 0,
-    ...
-},
+  parser: "@babel/eslint-parser",
+  parserOptions: {
+    requireConfigFile: false,
+    babelOptions: {
+      babelrc: false,
+      configFile: false,
+      // your babel options
+      presets: ["@babel/preset-react"],
+    },
+  },
+  
+
 };

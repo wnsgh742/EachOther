@@ -68,7 +68,6 @@ const History =({navigation:{navigate}, route})=>{
    const [qrid, setQrId] = useState();
     const UID = auth().currentUser.uid;
     const [profileData, setProfileData] = useState([]);
-    const [test2, setTest2] = useState();
 
     const getProfile = ()=>{
        
@@ -107,6 +106,53 @@ const History =({navigation:{navigate}, route})=>{
            
         
     }
+    const noQR = ()=>{
+        let c = []
+            firestore().collection("Profile").doc(UID).collection("QR")
+            .onSnapshot((snapshot)=>{
+                snapshot.docs.forEach((doc)=>{
+                    
+                  c.push({
+                    ...doc.data(),
+                  })  
+                  
+                })
+               
+                if(!c.length == 0){
+                    let data3 = []
+                for(let i = 0; i < c.length; i++) {
+                  data3.push(c[i].qrID);
+                };
+               
+                  if(!data3.length == 0){
+                    let b =[]
+                    firestore().collection("Profile").where("id","in",data3)
+                        .onSnapshot((snapshot)=>{
+                            snapshot.docs.forEach((doc)=>{
+                                b.push({
+                                    ...doc.data(),
+                                })
+                                setProfileData(b);
+                               
+                            })
+                            console.log(profileData);
+                        }) 
+                   }else{
+                    return;
+                   }
+                
+               
+                }else{
+                    return;
+                }
+                
+           
+             
+            })
+        
+           
+    }
+    
     const getQRId = () =>{
         let c = []
             firestore().collection("Profile").doc(UID).collection("QR")
@@ -118,58 +164,76 @@ const History =({navigation:{navigate}, route})=>{
                   })  
                   
                 })
-                let data3 = []
+                
+                if(!c.length == 0){
+                    let data3 = []
                 for(let i = 0; i < c.length; i++) {
                   data3.push(c[i].qrID);
-                 
-               };
-              // console.log(data3);
-              setQrId(data3);
-            
-            })
-            if(qrid){
-                getQR();
+                };
+                console.log(data3==false);
+                  if(data3.length > 0){
+                    let b =[]
+                    firestore().collection("Profile").where("id","in",data3)
+                        .onSnapshot((snapshot)=>{
+                            snapshot.docs.forEach((doc)=>{
+                                b.push({
+                                    ...doc.data(),
+                                })
+                                setProfileData(b);
+                               
+                            })
+                            console.log(profileData);
+                        }) 
+                   }else{
+                    return;
+                   }
+                
+               
+                }else{
+                    return;
+                }
+                
+      
+           
              
-            }else{
-                test();
-
-            }
+            })
+        
            
     }
-    const test = ()=>{
-      
-        console.log("suc");
-
-    }
+   
     useEffect(()=>{
-        
+    
         if(qrData){
-            
-            firestore().collection("Profile").doc(UID).collection("QR").add({
-                qrID:qrData.params,
-            })
           getQRId();
+         
         }else{
-         //  test();
-            getQRId();
+            let c = []
+            firestore().collection("Profile").doc(UID).collection("QR")
+            .onSnapshot((snapshot)=>{
+                snapshot.docs.forEach((doc)=>{
+                    
+                  c.push({
+                    ...doc.data(),
+                  })  
+                  
+                })
+                console.log(c.length==0);
+                if(c.length){
+                    getQRId();
+                   
+                }else{
+                    noQR();
+                }
+            }
             
-        }
-       
-        getQRId();
-       
+         
+         
+    )
+   
+           
+}     
     },[])
-    const HomeBack = ()=>{
-        navigate("Home");
-       }
-    const Delete = ()=>{
-        firestore().collection("Profile")
-        .doc(UID).delete();
-        console.log("delete");
-       
-    }
-    const MoveInfo = ({item})=>{
-        navigate("InNav",{screen:"HistoryInfo",params:{item}});
-    }
+  
     return(
         <Container>
             <TitleView>
@@ -205,7 +269,7 @@ const History =({navigation:{navigate}, route})=>{
                         </SwipeHiddenItem>
                       
                       <SwipeHiddenItem
-                      onPress={Delete}
+                      
                        style={{backgroundColor:"#FAB1A0"}}>
                             <SwipeHiddenItemText>delete</SwipeHiddenItemText>
                     </SwipeHiddenItem>

@@ -4,11 +4,11 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { FlatList } from "react-native";
 import LogContext from "../contexts/LogContext";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 const Container = styled.View`
+  flex: 1;
   align-items: center;
-    justify-content: center;
-   margin-top: 50px;
-   
+  justify-content: center;
 `;
 const Title = styled.Text`
    
@@ -17,10 +17,11 @@ const QRgenerator = styled.TouchableOpacity`
     background-color: ${(props)=> props.theme.btnColor};
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
-    border-radius: 15px;
-    width: 250px;
-    height: 60px;
+   
+    border-radius: 30px;
+    width: 150px;
+    height: 150px;
+    margin-right: 10px;
 `;
 const QRgeneratorText = styled.Text`
     font-size: 30px;
@@ -34,15 +35,19 @@ const QRscanner = styled.TouchableOpacity`
     background-color: ${(props)=> props.theme.btnColor};
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
-    border-radius: 15px;
-    width: 250px;
-    height: 60px;
+   
+    border-radius: 30px;
+    width: 150px;
+    height: 150px;
 `;
 const QRscannerText = styled.Text`
       font-size: 30px;
     color: white;
     border-color: black;
+`;
+const QRView = styled.View`
+  flex-direction: row;
+  margin-top: 80px;
 `;
 const Out = styled.TouchableOpacity`
      background-color: ${(props)=> props.theme.btnColor};
@@ -143,20 +148,22 @@ const Home =({navigation:{navigate},route})=>{
     return(
         <Container>
         
-            
+            <QRView>
           <QRgenerator onPress={QRgenerate}>
-            <QRgeneratorText>QR생성하기</QRgeneratorText>
+          <MaterialCommunityIcons name="qrcode-scan" size={80} color="white" />
           </QRgenerator>
           <QRscanner onPress={QRscan}>
-            <QRscannerText>QR스캔하기</QRscannerText>
+          <MaterialCommunityIcons name="magnify-scan" size={80} color="white" />
           </QRscanner>
-          <Out onPress={SignOut} >
+          </QRView>
+
+     {/*      <Out onPress={SignOut} >
             <OutText>SignOut</OutText>
           </Out>
-         <MoveCardView onPress={MoveCard}>
+          <MoveCardView onPress={MoveCard}>
           <MoveCardText>Cards</MoveCardText>
          </MoveCardView>
-    
+     */}
         </Container>
     )
 }
